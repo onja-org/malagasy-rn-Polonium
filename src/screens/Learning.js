@@ -27,18 +27,22 @@ import ToolButton from '../components/ToolButton/ToolButton';
 import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
-
 import {LANGUAGE_NAMES} from '../data/dataUtils';
-import {shuffleArray} from '../utils';
-
+import {shuffleArray, getCurrentCategoryName} from '../utils';
 export default ({
   //nav provider
   navigation,
 
+  categories,
   categoryPhrases,
   currentCategoryName,
   nativeLanguage,
   setLanguageName,
+  learntPhrases,
+  shouldLearntPhraseDisplayed,
+  // actions
+  addLearntPhrases,
+  removeWrongAswerFromLearntPhrases,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -53,7 +57,7 @@ export default ({
   }, [categoryPhrases]);
 
   const setAnswerOptionsCallback = (original, current) => {
-    const originWithoutCurrent = original.filter(phr => phr.id !== current.id);
+    const originWithoutCurrent = original.filter(phr => phr.id !== current?.id);
     const randomFromAll = shuffleArray(originWithoutCurrent).slice(0, 3);
     const randomWithCorrect = shuffleArray([...randomFromAll, current]);
     setAnswerOptions(randomWithCorrect);
@@ -61,22 +65,31 @@ export default ({
 
   const selectAnswerCallback = useCallback(
     item => {
-      if (item.id === currentPhrase.id) {
-        // TODO add to learned
+      // Check if the item is not in learnt phrases yet
+      const isItemNotExist = learntPhrases?.every(
+        phrase => phrase?.id !== item.id,
+      );
+
+      if (item.id === currentPhrase.id && isItemNotExist) {
+        addLearntPhrases(item);
       } else {
+        if (item.id !== currentPhrase.id) {
+          const learntPhrasesWithoutWrongAnswer = learntPhrases.filter(
+            phrase => phrase.id !== item.id,
+          );
+          removeWrongAswerFromLearntPhrases(learntPhrasesWithoutWrongAnswer);
+        }
         // TODO add to seen
       }
-
       setDisableAllOptions(true);
-
       const answerOptionsWithSelected = answerOptions.map(phrase => {
         return {...phrase, isSelected: phrase.id === item.id};
       });
-
       setAnswerOptions(answerOptionsWithSelected);
     },
     [currentPhrase, setDisableAllOptions, answerOptions],
   );
+
   const nextAnswerCallback = useCallback(() => {
     if (!Boolean(phrasesLeft.length)) {
       setshouldReshuffle(true);
@@ -103,7 +116,6 @@ export default ({
     const newPhrase = phrasesLeftCopy.shift();
     setPhrasesLeft(phrasesLeftCopy);
     setCurrentPhrase(newPhrase);
-
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
 
@@ -122,6 +134,26 @@ export default ({
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const phraseHeading = LANG_DATA[PHRASE_HEADING][nativeLanguage];
   const solutionHeading = LANG_DATA[SOLUTION_HEADING][nativeLanguage];
+  const currentPhraseCategoryName = categories.find(category =>
+    category.phrasesIds.find(phraseId => phraseId === currentPhrase?.id),
+  );
+
+  const getCategoryName = () => {
+    const catNameInEnglish = `Learnt phrases - ${
+      currentPhraseCategoryName?.name[LANGUAGE_NAMES.EN]
+    }`;
+    const catNameInMalagasy = `Fehezanteny efa nianarana - ${
+      currentPhraseCategoryName?.name[LANGUAGE_NAMES.MG]
+    }`;
+
+    // Get category name function from utils
+    return getCurrentCategoryName(
+      currentCategoryName,
+      shouldLearntPhraseDisplayed,
+      catNameInEnglish,
+      catNameInMalagasy,
+    );
+  };
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -168,7 +200,7 @@ export default ({
           </View>
           <View style={styles.heading}>
             <SectionHeading text={categoryHeading} />
-            <Text>{currentCategoryName}</Text>
+            <Text> {getCategoryName()} </Text>
           </View>
           <View style={styles.heading}>
             <SectionHeading text={phraseHeading} />

@@ -19,7 +19,6 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
 } from 'react-native';
-
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
 import ToolBar from '../components/ToolBar/ToolBar';
@@ -37,20 +36,25 @@ export default ({
   //state props
   categories,
   nativeLanguage,
+  learntPhrases,
   //actions
   setCategories,
   setCurrentCategory,
   setPhrases,
   setLanguageName,
+  showLearntPhrases,
+  synchronizeStorageToRedux,
 }) => {
   useEffect(() => {
     // fetch categories
     const categories = getAllCategories();
     setCategories(categories);
+    synchronizeStorageToRedux();
   }, []);
 
   const openCategoryPhrases = item => {
     setCurrentCategory(item.id);
+    showLearntPhrases(false);
     // fetch Phrases for category
     const phrasesForCategory = getPhrasesForCategoryId(item.id);
     setPhrases(phrasesForCategory);
@@ -63,6 +67,24 @@ export default ({
   const seenPhrasesHeading = LANG_DATA[SEEN_PHRASES_HEADING][nativeLanguage];
   const learntPhrasesHeading =
     LANG_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
+
+  const openLearntPhrases = () => {
+    if (learntPhrases.length > 0) {
+      showLearntPhrases(true);
+      setPhrases(learntPhrases);
+      navigation.navigate('Learn');
+    }
+  };
+
+  const setlearntPhrasesRowText = () => {
+    if (learntPhrases.length === 0) {
+      return `No learnt phrases yet`;
+    } else if (learntPhrases.length === 1) {
+      return `${learntPhrases.length} word and phrase`;
+    } else {
+      return `${learntPhrases.length} words and phrases`;
+    }
+  };
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -147,10 +169,17 @@ export default ({
           <List
             data={[{id: 2, name: '10 words and phrases'}]}
             text={learnButtonText}
+            data={[
+              {
+                id: 2,
+                name: setlearntPhrasesRowText(),
+              },
+            ]}
+            text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            makeAction={() => {}}
+            makeAction={openLearntPhrases}
           />
         </View>
       </KeyboardAvoidingView>

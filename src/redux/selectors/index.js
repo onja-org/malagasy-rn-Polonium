@@ -7,6 +7,8 @@ export const categoryPhrasesRoot = state => {
 };
 export const randomPhrase = state => state.randomPhrase;
 export const currentCategoryIdRoot = state => state.currentCategoryId;
+export const learntPhrases = state => state.learntPhrases;
+export const shouldLearntPhraseDisplayed = state => state.showLearntPhrases;
 
 export const currentCategory = createSelector(
   [currentCategoryIdRoot, categoriesRoot],
