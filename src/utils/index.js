@@ -1,3 +1,4 @@
+import {LANGUAGE_NAMES} from '../data/dataUtils';
 // returns shuffeled array without mutating original one
 // based on https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 
@@ -20,4 +21,25 @@ export const shuffleArray = arrayToShuffle => {
   }
 
   return array;
+};
+
+// Set category name in learnt phrases screen
+export const getCurrentCategoryName = (
+  currentCategoryName,
+  shouldPhrasesDisplayed,
+  catNameInEnglish,
+  catNameInMalagasy,
+) => {
+  if (shouldPhrasesDisplayed) {
+    const phrasesCategory = {
+      id: 2,
+      name: {
+        en: catNameInEnglish,
+        mg: catNameInMalagasy,
+      },
+    };
+    return phrasesCategory?.name?.[LANGUAGE_NAMES.EN];
+  } else {
+    return currentCategoryName;
+  }
 };

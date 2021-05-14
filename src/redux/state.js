@@ -5,4 +5,5 @@ export default {
   currentCategoryId: '',
   categoryPhrases: [],
   nativeLanguage: LANGUAGE_NAMES.EN,
+  learntPhrases: [],
 };
