@@ -5,6 +5,13 @@ import {
   getPhrasesForCategoryId,
   getAllCategories,
 } from '../data/dataUtils';
+import {
+  LANG_DATA,
+  LEARN_BUTTON_TEXT,
+  SELECT_CATEGORY_HEADING,
+  SEEN_PHRASES_HEADING,
+  LEARNT_PHRASES_HEADING,
+} from '../translations';
 
 import {
   View,
@@ -34,6 +41,7 @@ export default ({
   setCategories,
   setCurrentCategory,
   setPhrases,
+  setLanguageName,
 }) => {
   useEffect(() => {
     // fetch categories
@@ -48,6 +56,13 @@ export default ({
     setPhrases(phrasesForCategory);
     navigation.navigate('Learn');
   };
+
+  const learnButtonText = LANG_DATA[LEARN_BUTTON_TEXT][nativeLanguage];
+  const selectCategoryHeading =
+    LANG_DATA[SELECT_CATEGORY_HEADING][nativeLanguage];
+  const seenPhrasesHeading = LANG_DATA[SEEN_PHRASES_HEADING][nativeLanguage];
+  const learntPhrasesHeading =
+    LANG_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -65,12 +80,18 @@ export default ({
               button={
                 <LanguageSwitcher
                   firstLanguage={LANGUAGE_NAMES.EN}
-                  LeftText="EN"
-                  RightText="MA"
+                  LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? 'MG' : 'EN'}
+                  RightText={nativeLanguage === LANGUAGE_NAMES.EN ? 'EN' : 'MG'}
                   color="#FFFFFF"
                   iconType=""
                   iconName="swap-horiz"
-                  onPress={() => null}
+                  onPress={() =>
+                    setLanguageName(
+                      nativeLanguage === LANGUAGE_NAMES.EN
+                        ? LANGUAGE_NAMES.MG
+                        : LANGUAGE_NAMES.EN,
+                    )
+                  }
                   iconSize={24}
                 />
               }
@@ -98,34 +119,34 @@ export default ({
             />
           </View>
           <View style={styles.heading}>
-            <SectionHeading text="Select a category:" />
+            <SectionHeading text={selectCategoryHeading} />
           </View>
           <List
             lang={nativeLanguage}
             data={categories}
-            text={'Learn'}
+            text={learnButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
             makeAction={openCategoryPhrases}
           />
           <View style={styles.heading}>
-            <SectionHeading text="Seen phrases:" />
+            <SectionHeading text={seenPhrasesHeading} />
           </View>
           <List
             data={[{id: 1, name: '35 words and phrases'}]}
-            text={'Learn'}
+            text={learnButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
             makeAction={() => {}}
           />
           <View style={styles.heading}>
-            <SectionHeading text="Learnt phrases:" />
+            <SectionHeading text={learntPhrasesHeading} />
           </View>
           <List
             data={[{id: 2, name: '10 words and phrases'}]}
-            text={'Learn'}
+            text={learnButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"

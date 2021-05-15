@@ -7,6 +7,17 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
 } from 'react-native';
+import {
+  LANG_DATA,
+  PICK_BUTTON_TEXT,
+  NEXT_BUTTON_TEXT,
+  RESHUFFLE_BUTTON_TEXT,
+  CATEGORY_HEADING,
+  PHRASE_HEADING,
+  SOLUTION_HEADING,
+  SHOULD_RESHUFFLE_TEXTAREA_CONTENT,
+} from '../translations';
+
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
 import ToolBar from '../components/ToolBar/ToolBar';
@@ -26,6 +37,8 @@ export default ({
 
   categoryPhrases,
   currentCategoryName,
+  setLanguageName,
+  nativeLanguage,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
@@ -94,6 +107,22 @@ export default ({
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
 
+  const shouldReshuffleTextareaContent =
+    LANG_DATA[SHOULD_RESHUFFLE_TEXTAREA_CONTENT][nativeLanguage];
+
+  const shouldNotReshuffleTextareaContent =
+    nativeLanguage === LANGUAGE_NAMES.EN
+      ? currentPhrase?.name?.[LANGUAGE_NAMES.MG]
+      : currentPhrase?.name?.[LANGUAGE_NAMES.EN];
+
+  const pickButtonText = LANG_DATA[PICK_BUTTON_TEXT][nativeLanguage];
+  const nextButtonText = LANG_DATA[NEXT_BUTTON_TEXT][nativeLanguage];
+  const reshuffleButtonText = LANG_DATA[RESHUFFLE_BUTTON_TEXT][nativeLanguage];
+
+  const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
+  const phraseHeading = LANG_DATA[PHRASE_HEADING][nativeLanguage];
+  const solutionHeading = LANG_DATA[SOLUTION_HEADING][nativeLanguage];
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
@@ -113,12 +142,18 @@ export default ({
               button={
                 <LanguageSwitcher
                   firstLanguage={LANGUAGE_NAMES.EN}
-                  LeftText="EN"
-                  RightText="MA"
+                  LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? 'MG' : 'EN'}
+                  RightText={nativeLanguage === LANGUAGE_NAMES.EN ? 'EN' : 'MG'}
                   color="#FFFFFF"
                   iconType=""
                   iconName="swap-horiz"
-                  onPress={() => null}
+                  onPress={() =>
+                    setLanguageName(
+                      nativeLanguage === LANGUAGE_NAMES.EN
+                        ? LANGUAGE_NAMES.MG
+                        : LANGUAGE_NAMES.EN,
+                    )
+                  }
                   iconSize={24}
                 />
               }
@@ -132,31 +167,35 @@ export default ({
             />
           </View>
           <View style={styles.heading}>
-            <SectionHeading text="Category: " />
+            <SectionHeading text={categoryHeading} />
             <Text>{currentCategoryName}</Text>
           </View>
           <View style={styles.heading}>
-            <SectionHeading text="The phrase: " />
+            <SectionHeading text={phraseHeading} />
           </View>
           <View style={{marginBottom: 37}}>
             <Textarea
               editable={false}
               phrase={
                 shouldReshuffle
-                  ? 'You have answered all the questions in this category'
-                  : currentPhrase?.name?.[LANGUAGE_NAMES.EN]
+                  ? shouldReshuffleTextareaContent
+                  : shouldNotReshuffleTextareaContent
               }
             />
           </View>
           {!shouldReshuffle && Boolean(answerOptions && answerOptions.length) && (
             <View>
               <View style={styles.heading}>
-                <SectionHeading text="Pick a solution: " />
+                <SectionHeading text={solutionHeading} />
               </View>
               <List
-                lang={LANGUAGE_NAMES.MG}
+                lang={
+                  nativeLanguage === LANGUAGE_NAMES.EN
+                    ? LANGUAGE_NAMES.EN
+                    : LANGUAGE_NAMES.MG
+                }
                 data={answerOptions}
-                text="Pick"
+                text={pickButtonText}
                 color="#06B6D4"
                 iconType="material-community"
                 iconName="arrow-right"
@@ -172,7 +211,7 @@ export default ({
               <NextButton
                 isDisabled={false}
                 textColor="#FFFFFF"
-                text={'Next'}
+                text={nextButtonText}
                 onPress={nextAnswerCallback}
               />
             </View>
@@ -182,7 +221,7 @@ export default ({
               <NextButton
                 isDisabled={false}
                 textColor="#FFFFFF"
-                text={'Reshuffle'}
+                text={reshuffleButtonText}
                 onPress={reshuffleCallback}
               />
             </View>
