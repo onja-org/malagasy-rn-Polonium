@@ -1,10 +1,12 @@
 import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
 import {action} from '@storybook/addon-actions';
 import {
   LANGUAGE_NAMES,
   getPhrasesForCategoryId,
   getAllCategories,
 } from '../data/dataUtils';
+import {SET_LANGUAGE_NAME} from '../redux/constants';
 
 import {
   View,
@@ -35,6 +37,7 @@ export default ({
   setCurrentCategory,
   setPhrases,
 }) => {
+  const dispatch = useDispatch();
   useEffect(() => {
     // fetch categories
     const categories = getAllCategories();
@@ -48,6 +51,16 @@ export default ({
     setPhrases(phrasesForCategory);
     navigation.navigate('Learn');
   };
+
+  function switchNativeLanguage() {
+    dispatch({
+      type: SET_LANGUAGE_NAME,
+      payload:
+        nativeLanguage === LANGUAGE_NAMES.EN
+          ? LANGUAGE_NAMES.MG
+          : LANGUAGE_NAMES.EN,
+    });
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -64,13 +77,13 @@ export default ({
             <ToolBar
               button={
                 <LanguageSwitcher
-                  firstLanguage={LANGUAGE_NAMES.EN}
+                  firstLanguage={nativeLanguage}
                   LeftText="EN"
                   RightText="MA"
                   color="#FFFFFF"
                   iconType=""
                   iconName="swap-horiz"
-                  onPress={() => null}
+                  onPress={switchNativeLanguage}
                   iconSize={24}
                 />
               }
@@ -98,34 +111,52 @@ export default ({
             />
           </View>
           <View style={styles.heading}>
-            <SectionHeading text="Select a category:" />
+            <SectionHeading
+              text={
+                nativeLanguage === LANGUAGE_NAMES.EN
+                  ? 'Select a category:'
+                  : 'Misafidiana sokajy:'
+              }
+            />
           </View>
           <List
             lang={nativeLanguage}
             data={categories}
-            text={'Learn'}
+            text={nativeLanguage === LANGUAGE_NAMES.EN ? 'Learn' : 'Ianarana'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
             makeAction={openCategoryPhrases}
           />
           <View style={styles.heading}>
-            <SectionHeading text="Seen phrases:" />
+            <SectionHeading
+              text={
+                nativeLanguage === LANGUAGE_NAMES.EN
+                  ? 'Seen phrases:'
+                  : 'Andian-teny hita:'
+              }
+            />
           </View>
           <List
             data={[{id: 1, name: '35 words and phrases'}]}
-            text={'Learn'}
+            text={nativeLanguage === LANGUAGE_NAMES.EN ? 'Learn' : 'Ianarana'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
             makeAction={() => {}}
           />
           <View style={styles.heading}>
-            <SectionHeading text="Learnt phrases:" />
+            <SectionHeading
+              text={
+                nativeLanguage === LANGUAGE_NAMES.EN
+                  ? 'Learnt phrases:'
+                  : 'Andian-teny nianarana:'
+              }
+            />
           </View>
           <List
             data={[{id: 2, name: '10 words and phrases'}]}
-            text={'Learn'}
+            text={nativeLanguage === LANGUAGE_NAMES.EN ? 'Learn' : 'Ianarana'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"

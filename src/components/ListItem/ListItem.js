@@ -32,8 +32,12 @@ const RenderDataItem = ({
   const textToDisplay = !shouldDisplayAnswer
     ? text
     : showAsCorrect
-    ? 'Correct'
-    : 'Wrong';
+    ? lang === 'en'
+      ? 'Correct'
+      : 'Marina'
+    : lang === 'en'
+    ? 'Wrong'
+    : 'Diso';
 
   const colorToDisplay = !shouldDisplayAnswer
     ? color
