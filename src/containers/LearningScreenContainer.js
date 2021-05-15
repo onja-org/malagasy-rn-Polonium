@@ -1,5 +1,6 @@
 import {connect} from 'react-redux';
 import Learning from '../screens/Learning';
+import {setLanguageName} from '../redux/actions';
 import {
   categoryPhrasesRoot,
   currentCategoryName,
@@ -13,6 +14,8 @@ function mapStateToProps(state) {
     nativeLanguage: nativeLanguageRoot(state),
   };
 }
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  setLanguageName,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Learning);

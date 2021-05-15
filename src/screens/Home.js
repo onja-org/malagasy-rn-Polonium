@@ -1,12 +1,10 @@
 import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
 import {action} from '@storybook/addon-actions';
 import {
   LANGUAGE_NAMES,
   getPhrasesForCategoryId,
   getAllCategories,
 } from '../data/dataUtils';
-import {SET_LANGUAGE_NAME} from '../redux/constants';
 
 import {
   View,
@@ -36,8 +34,8 @@ export default ({
   setCategories,
   setCurrentCategory,
   setPhrases,
+  setLanguageName,
 }) => {
-  const dispatch = useDispatch();
   useEffect(() => {
     // fetch categories
     const categories = getAllCategories();
@@ -52,15 +50,16 @@ export default ({
     navigation.navigate('Learn');
   };
 
-  function switchNativeLanguage() {
-    dispatch({
-      type: SET_LANGUAGE_NAME,
-      payload:
-        nativeLanguage === LANGUAGE_NAMES.EN
-          ? LANGUAGE_NAMES.MG
-          : LANGUAGE_NAMES.EN,
-    });
-  }
+  const switchNativeLanguage = () => {
+    setLanguageName(
+      nativeLanguage === LANGUAGE_NAMES.EN
+        ? LANGUAGE_NAMES.MG
+        : LANGUAGE_NAMES.EN,
+    );
+  };
+
+  const actionButtonText =
+    nativeLanguage === LANGUAGE_NAMES.EN ? 'Learn' : 'Hianatra';
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -122,7 +121,7 @@ export default ({
           <List
             lang={nativeLanguage}
             data={categories}
-            text={nativeLanguage === LANGUAGE_NAMES.EN ? 'Learn' : 'Ianarana'}
+            text={actionButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
@@ -139,7 +138,7 @@ export default ({
           </View>
           <List
             data={[{id: 1, name: '35 words and phrases'}]}
-            text={nativeLanguage === LANGUAGE_NAMES.EN ? 'Learn' : 'Ianarana'}
+            text={actionButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
@@ -156,7 +155,7 @@ export default ({
           </View>
           <List
             data={[{id: 2, name: '10 words and phrases'}]}
-            text={nativeLanguage === LANGUAGE_NAMES.EN ? 'Learn' : 'Ianarana'}
+            text={actionButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"

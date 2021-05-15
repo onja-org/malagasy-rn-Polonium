@@ -7,7 +7,6 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
 
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
@@ -21,7 +20,6 @@ import ModeIcon from '../components/ToolButton/assets/mode.svg';
 
 import {LANGUAGE_NAMES} from '../data/dataUtils';
 import {shuffleArray} from '../utils';
-import {SET_LANGUAGE_NAME} from '../redux/constants';
 
 export default ({
   //nav provider
@@ -30,8 +28,8 @@ export default ({
   categoryPhrases,
   currentCategoryName,
   nativeLanguage,
+  setLanguageName,
 }) => {
-  const dispatch = useDispatch();
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
   const [currentPhrase, setCurrentPhrase] = useState(null);
@@ -99,15 +97,13 @@ export default ({
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
 
-  function switchNativeLanguage() {
-    dispatch({
-      type: SET_LANGUAGE_NAME,
-      payload:
-        nativeLanguage === LANGUAGE_NAMES.EN
-          ? LANGUAGE_NAMES.MG
-          : LANGUAGE_NAMES.EN,
-    });
-  }
+  const switchNativeLanguage = () => {
+    setLanguageName(
+      nativeLanguage === LANGUAGE_NAMES.EN
+        ? LANGUAGE_NAMES.MG
+        : LANGUAGE_NAMES.EN,
+    );
+  };
 
   const shouldReshuffleTextareaContent =
     nativeLanguage === LANGUAGE_NAMES.EN
