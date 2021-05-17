@@ -7,7 +7,8 @@ export const categoryPhrasesRoot = state => {
 };
 export const randomPhrase = state => state.randomPhrase;
 export const currentCategoryIdRoot = state => state.currentCategoryId;
-
+export const learntPhrases = state => state.learntPhrases;
+export const newTermsRoot = state => state.newTerms;
 export const currentCategory = createSelector(
   [currentCategoryIdRoot, categoriesRoot],
   (selectedCategoryId, allCategories) => {
@@ -17,6 +18,15 @@ export const currentCategory = createSelector(
     return selectedCategory;
   },
 );
+
+export const isLearntPhrases = createSelector(
+  [currentCategoryIdRoot],
+  selectedCategoryId => {
+    const selectedCategory = '###learntPhrases###' === selectedCategoryId;
+    return selectedCategory;
+  },
+);
+
 export const currentCategoryPhrasesIds = createSelector(
   [currentCategory],
   selectedCategory => {
