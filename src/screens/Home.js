@@ -5,6 +5,13 @@ import {
   getPhrasesForCategoryId,
   getAllCategories,
 } from '../data/dataUtils';
+import {
+  LANG_DATA,
+  LEARN_BUTTON_TEXT,
+  SELECT_CATEGORY_HEADING,
+  SEEN_PHRASES_HEADING,
+  LEARNT_PHRASES_HEADING,
+} from '../translations';
 
 import {
   View,
@@ -50,16 +57,12 @@ export default ({
     navigation.navigate('Learn');
   };
 
-  const switchNativeLanguage = () => {
-    setLanguageName(
-      nativeLanguage === LANGUAGE_NAMES.EN
-        ? LANGUAGE_NAMES.MG
-        : LANGUAGE_NAMES.EN,
-    );
-  };
-
-  const actionButtonText =
-    nativeLanguage === LANGUAGE_NAMES.EN ? 'Learn' : 'Hianatra';
+  const learnButtonText = LANG_DATA[LEARN_BUTTON_TEXT][nativeLanguage];
+  const selectCategoryHeading =
+    LANG_DATA[SELECT_CATEGORY_HEADING][nativeLanguage];
+  const seenPhrasesHeading = LANG_DATA[SEEN_PHRASES_HEADING][nativeLanguage];
+  const learntPhrasesHeading =
+    LANG_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -82,7 +85,13 @@ export default ({
                   color="#FFFFFF"
                   iconType=""
                   iconName="swap-horiz"
-                  onPress={switchNativeLanguage}
+                  onPress={() =>
+                    setLanguageName(
+                      nativeLanguage === LANGUAGE_NAMES.EN
+                        ? LANGUAGE_NAMES.MG
+                        : LANGUAGE_NAMES.EN,
+                    )
+                  }
                   iconSize={24}
                 />
               }
@@ -110,52 +119,34 @@ export default ({
             />
           </View>
           <View style={styles.heading}>
-            <SectionHeading
-              text={
-                nativeLanguage === LANGUAGE_NAMES.EN
-                  ? 'Select a category:'
-                  : 'Misafidiana sokajy:'
-              }
-            />
+            <SectionHeading text={selectCategoryHeading} />
           </View>
           <List
             lang={nativeLanguage}
             data={categories}
-            text={actionButtonText}
+            text={learnButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
             makeAction={openCategoryPhrases}
           />
           <View style={styles.heading}>
-            <SectionHeading
-              text={
-                nativeLanguage === LANGUAGE_NAMES.EN
-                  ? 'Seen phrases:'
-                  : 'Andian-teny hita:'
-              }
-            />
+            <SectionHeading text={seenPhrasesHeading} />
           </View>
           <List
             data={[{id: 1, name: '35 words and phrases'}]}
-            text={actionButtonText}
+            text={learnButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
             makeAction={() => {}}
           />
           <View style={styles.heading}>
-            <SectionHeading
-              text={
-                nativeLanguage === LANGUAGE_NAMES.EN
-                  ? 'Learnt phrases:'
-                  : 'Andian-teny nianarana:'
-              }
-            />
+            <SectionHeading text={learntPhrasesHeading} />
           </View>
           <List
             data={[{id: 2, name: '10 words and phrases'}]}
-            text={actionButtonText}
+            text={learnButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"

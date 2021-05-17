@@ -7,6 +7,16 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
 } from 'react-native';
+import {
+  LANG_DATA,
+  PICK_BUTTON_TEXT,
+  NEXT_BUTTON_TEXT,
+  RESHUFFLE_BUTTON_TEXT,
+  CATEGORY_HEADING,
+  PHRASE_HEADING,
+  SOLUTION_HEADING,
+  SHOULD_RESHUFFLE_TEXTAREA_CONTENT,
+} from '../translations';
 
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
@@ -97,23 +107,21 @@ export default ({
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
 
-  const switchNativeLanguage = () => {
-    setLanguageName(
-      nativeLanguage === LANGUAGE_NAMES.EN
-        ? LANGUAGE_NAMES.MG
-        : LANGUAGE_NAMES.EN,
-    );
-  };
-
   const shouldReshuffleTextareaContent =
-    nativeLanguage === LANGUAGE_NAMES.EN
-      ? 'You have answered all the questions in this category'
-      : "Efa voavalinao avokoa ny fanontaniana rehetra amin'ity sokajy ity";
+    LANG_DATA[SHOULD_RESHUFFLE_TEXTAREA_CONTENT][nativeLanguage];
 
   const shouldNotReshuffleTextareaContent =
     nativeLanguage === LANGUAGE_NAMES.EN
       ? currentPhrase?.name?.[LANGUAGE_NAMES.MG]
       : currentPhrase?.name?.[LANGUAGE_NAMES.EN];
+
+  const pickButtonText = LANG_DATA[PICK_BUTTON_TEXT][nativeLanguage];
+  const nextButtonText = LANG_DATA[NEXT_BUTTON_TEXT][nativeLanguage];
+  const reshuffleButtonText = LANG_DATA[RESHUFFLE_BUTTON_TEXT][nativeLanguage];
+
+  const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
+  const phraseHeading = LANG_DATA[PHRASE_HEADING][nativeLanguage];
+  const solutionHeading = LANG_DATA[SOLUTION_HEADING][nativeLanguage];
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -139,7 +147,13 @@ export default ({
                   color="#FFFFFF"
                   iconType=""
                   iconName="swap-horiz"
-                  onPress={switchNativeLanguage}
+                  onPress={() =>
+                    setLanguageName(
+                      nativeLanguage === LANGUAGE_NAMES.EN
+                        ? LANGUAGE_NAMES.MG
+                        : LANGUAGE_NAMES.EN,
+                    )
+                  }
                   iconSize={24}
                 />
               }
@@ -153,21 +167,11 @@ export default ({
             />
           </View>
           <View style={styles.heading}>
-            <SectionHeading
-              text={
-                nativeLanguage === LANGUAGE_NAMES.EN ? 'Category: ' : 'Sokajy: '
-              }
-            />
+            <SectionHeading text={categoryHeading} />
             <Text>{currentCategoryName}</Text>
           </View>
           <View style={styles.heading}>
-            <SectionHeading
-              text={
-                nativeLanguage === LANGUAGE_NAMES.EN
-                  ? 'The phrase: '
-                  : 'Ilay andianteny:'
-              }
-            />
+            <SectionHeading text={phraseHeading} />
           </View>
           <View style={{marginBottom: 37}}>
             <Textarea
@@ -182,13 +186,7 @@ export default ({
           {!shouldReshuffle && Boolean(answerOptions && answerOptions.length) && (
             <View>
               <View style={styles.heading}>
-                <SectionHeading
-                  text={
-                    nativeLanguage === LANGUAGE_NAMES.EN
-                      ? 'Pick a solution: '
-                      : 'Fidio ny valiny marina: '
-                  }
-                />
+                <SectionHeading text={solutionHeading} />
               </View>
               <List
                 lang={
@@ -197,7 +195,7 @@ export default ({
                     : LANGUAGE_NAMES.MG
                 }
                 data={answerOptions}
-                text={nativeLanguage === LANGUAGE_NAMES.EN ? 'Pick' : 'Hifidy'}
+                text={pickButtonText}
                 color="#06B6D4"
                 iconType="material-community"
                 iconName="arrow-right"
@@ -213,9 +211,7 @@ export default ({
               <NextButton
                 isDisabled={false}
                 textColor="#FFFFFF"
-                text={
-                  nativeLanguage === LANGUAGE_NAMES.EN ? 'Next' : 'Manaraka'
-                }
+                text={nextButtonText}
                 onPress={nextAnswerCallback}
               />
             </View>
@@ -225,11 +221,7 @@ export default ({
               <NextButton
                 isDisabled={false}
                 textColor="#FFFFFF"
-                text={
-                  nativeLanguage === LANGUAGE_NAMES.EN
-                    ? 'Reshuffle'
-                    : 'Atsombadika'
-                }
+                text={reshuffleButtonText}
                 onPress={reshuffleCallback}
               />
             </View>
