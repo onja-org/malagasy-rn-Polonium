@@ -26,6 +26,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: yarn install
-    - run: yarn add typescript
-    - run: yarn lint
     - run: yarn jest src/data/phrases.test.js
