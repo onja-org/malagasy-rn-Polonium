@@ -71,7 +71,10 @@ export default ({
           <View style={styles.header}>
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
+                <ToolButton
+                  onPress={() => {
+                    navigation.navigate('Add');
+                  }}>
                   <AddIcon width={24} height={24} fill="#FFFFFF" />
                 </ToolButton>
               }
