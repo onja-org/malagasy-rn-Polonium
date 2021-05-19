@@ -5,8 +5,8 @@ import {
   StyleSheet,
   SafeAreaView,
   KeyboardAvoidingView,
+  TouchableOpacity,
 } from 'react-native';
-import DropDownPicker from 'react-native-custom-dropdown';
 import {LANGUAGE_NAMES} from '../data/dataUtils';
 import {
   LANG_DATA,
@@ -15,6 +15,8 @@ import {
   MALAGASY_PHRASE_HEADING,
   PLACEHOLDER_NEW_TERM,
   ADD_BUTTON_TEXT,
+  SELECT_CATEGORY_HEADING,
+  CLOSE_BUTTON_TEXT,
 } from '../translations';
 
 import ToolBar from '../components/ToolBar/ToolBar';
@@ -23,9 +25,11 @@ import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
 import AddButton from '../components/NextButton/NextButton';
+import TriangleDownIcon from '../components/ToolButton/assets/triangle-down.svg';
 
 import SectionHeading from '../components/SectionHeading/SectionHeading';
 import Textarea from '../components/Textarea/Textarea';
+import List from '../components/List/List';
 
 export default ({
   //nav provider
@@ -37,6 +41,7 @@ export default ({
   const [englishPhrase, setEnglishPhrase] = useState('');
   const [malagasyPhrase, setMalagasyPhrase] = useState('');
   const [openCategoriesList, setOpenCategoriesList] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState({});
 
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const englishPhraseHeading =
@@ -45,6 +50,14 @@ export default ({
     LANG_DATA[MALAGASY_PHRASE_HEADING][nativeLanguage];
   const placeholderNewTerm = LANG_DATA[PLACEHOLDER_NEW_TERM][nativeLanguage];
   const addButtonText = LANG_DATA[ADD_BUTTON_TEXT][nativeLanguage];
+  const selectCategoryHeading =
+    LANG_DATA[SELECT_CATEGORY_HEADING][nativeLanguage];
+  const closeButtonText = LANG_DATA[CLOSE_BUTTON_TEXT][nativeLanguage];
+
+  function selectCategory(category) {
+    setSelectedCategory(category);
+    setOpenCategoriesList(false);
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -91,10 +104,38 @@ export default ({
           </View>
           <View style={styles.heading}>
             <SectionHeading text={categoryHeading} />
-            <View onPress={() => setOpenCategoriesList(true)}>
-              <Text>Select a category</Text>
-            </View>
+            <TouchableOpacity
+              style={styles.select}
+              onPress={() => setOpenCategoriesList(true)}>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode={'tail'}
+                style={styles.labelSelect}>
+                {Object.keys(selectedCategory).length === 0 &&
+                selectedCategory.constructor === Object
+                  ? selectCategoryHeading
+                  : selectedCategory?.name[nativeLanguage]}
+              </Text>
+              <View style={{marginLeft: 5, marginTop: 2}}>
+                <TriangleDownIcon width={11} height={11} />
+              </View>
+            </TouchableOpacity>
+            {openCategoriesList && (
+              <View style={styles.dropdownSelect}>
+                <List
+                  data={categories}
+                  lang={nativeLanguage}
+                  makeAction={selectCategory}
+                />
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setOpenCategoriesList(false)}>
+                  <Text style={styles.closeButtonText}>{closeButtonText}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
+
           <View style={styles.heading}>
             <SectionHeading text={englishPhraseHeading} />
           </View>
@@ -140,5 +181,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingBottom: 15,
+  },
+  select: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    zIndex: 1,
+  },
+  labelSelect: {
+    fontWeight: '600',
+    fontSize: 18,
+    color: '#06B6D4',
+    maxWidth: 255,
+  },
+  dropdownSelect: {
+    zIndex: 3,
+    position: 'absolute',
+    backgroundColor: '#FFFFFF',
+    width: '100%',
+    top: 32,
+    padding: 16,
+  },
+  closeButton: {
+    padding: 10,
+    backgroundColor: '#D4068E',
+  },
+  closeButtonText: {
+    color: '#FFFFFF',
+    textAlign: 'center',
   },
 });
