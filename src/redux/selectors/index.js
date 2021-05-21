@@ -7,6 +7,7 @@ export const categoryPhrasesRoot = state => {
 };
 export const randomPhrase = state => state.randomPhrase;
 export const currentCategoryIdRoot = state => state.currentCategoryId;
+export const newTermsRoot = state => state.newTerms;
 
 export const currentCategory = createSelector(
   [currentCategoryIdRoot, categoriesRoot],

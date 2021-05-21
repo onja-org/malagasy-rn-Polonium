@@ -6,7 +6,11 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 import {LANGUAGE_NAMES} from '../data/dataUtils';
 import {
   LANG_DATA,
@@ -18,6 +22,7 @@ import {
   SELECT_CATEGORY_HEADING,
   CLOSE_BUTTON_TEXT,
 } from '../translations';
+import {generateId} from '../utils';
 
 import ToolBar from '../components/ToolBar/ToolBar';
 import ToolButton from '../components/ToolButton/ToolButton';
@@ -37,11 +42,17 @@ export default ({
   categories,
   setLanguageName,
   nativeLanguage,
+  addNewTerm,
 }) => {
   const [englishPhrase, setEnglishPhrase] = useState('');
   const [malagasyPhrase, setMalagasyPhrase] = useState('');
   const [openCategoriesList, setOpenCategoriesList] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState({});
+  const [categoryId, setCategoryId] = useState('');
+  const disableAddButton =
+    englishPhrase.length < 1 ||
+    malagasyPhrase.length < 1 ||
+    categoryId.length < 1;
 
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const englishPhraseHeading =
@@ -54,14 +65,31 @@ export default ({
     LANG_DATA[SELECT_CATEGORY_HEADING][nativeLanguage];
   const closeButtonText = LANG_DATA[CLOSE_BUTTON_TEXT][nativeLanguage];
 
-  function selectCategory(category) {
+  const selectCategory = category => {
     setSelectedCategory(category);
+    setCategoryId(category?.id);
     setOpenCategoriesList(false);
-  }
+  };
+
+  const addNewTermToCategory = () => {
+    const newTerm = {
+      catId: categoryId,
+      id: generateId(),
+      name: {
+        en: englishPhrase,
+        mg: malagasyPhrase,
+      },
+    };
+    addNewTerm(newTerm);
+    setEnglishPhrase('');
+    setMalagasyPhrase('');
+    setSelectedCategory({});
+    setCategoryId('');
+  };
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+      <KeyboardAvoidingView style={{flex: 1}}>
         <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
           <View style={styles.header}>
             <ToolBar
@@ -111,8 +139,7 @@ export default ({
                 numberOfLines={1}
                 ellipsizeMode={'tail'}
                 style={styles.labelSelect}>
-                {Object.keys(selectedCategory).length === 0 &&
-                selectedCategory.constructor === Object
+                {!selectedCategory?.name
                   ? selectCategoryHeading
                   : selectedCategory?.name[nativeLanguage]}
               </Text>
@@ -135,37 +162,48 @@ export default ({
               </View>
             )}
           </View>
+          <KeyboardAwareScrollView>
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+              <View style={styles.heading}>
+                <SectionHeading text={englishPhraseHeading} />
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+              <View style={{marginBottom: 37}}>
+                <Textarea
+                  phrase={englishPhrase}
+                  editable={true}
+                  onChange={text => setEnglishPhrase(text)}
+                  placeholder={placeholderNewTerm}
+                />
+              </View>
+            </TouchableWithoutFeedback>
 
-          <View style={styles.heading}>
-            <SectionHeading text={englishPhraseHeading} />
-          </View>
-          <View style={{marginBottom: 37}}>
-            <Textarea
-              phrase={englishPhrase}
-              editable={true}
-              onChange={text => setEnglishPhrase(text)}
-              placeholder={placeholderNewTerm}
-            />
-          </View>
-          <View style={styles.heading}>
-            <SectionHeading text={malagasyPhraseHeading} />
-          </View>
-          <View style={{marginBottom: 37}}>
-            <Textarea
-              phrase={malagasyPhrase}
-              editable={true}
-              onChange={text => setMalagasyPhrase(text)}
-              placeholder={placeholderNewTerm}
-            />
-          </View>
-          <View style={{marginTop: 45}}>
-            <AddButton
-              isDisabled={true}
-              textColor="#06B6D4"
-              text={addButtonText}
-              onPress={() => {}}
-            />
-          </View>
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+              <View style={styles.heading}>
+                <SectionHeading text={malagasyPhraseHeading} />
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+              <View style={{marginBottom: 37}}>
+                <Textarea
+                  phrase={malagasyPhrase}
+                  editable={true}
+                  onChange={text => setMalagasyPhrase(text)}
+                  placeholder={placeholderNewTerm}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+
+            <View style={{marginTop: 45}}>
+              <AddButton
+                isDisabled={disableAddButton}
+                textColor={disableAddButton ? '#06B6D4' : '#FFFFFF'}
+                text={addButtonText}
+                onPress={addNewTermToCategory}
+              />
+            </View>
+          </KeyboardAwareScrollView>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -209,5 +247,6 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: '#FFFFFF',
     textAlign: 'center',
+    fontSize: 18,
   },
 });

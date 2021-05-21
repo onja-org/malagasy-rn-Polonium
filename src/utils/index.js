@@ -1,3 +1,5 @@
+import 'react-native-get-random-values';
+import {v4 as uuid} from 'uuid';
 // returns shuffeled array without mutating original one
 // based on https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 
@@ -20,4 +22,8 @@ export const shuffleArray = arrayToShuffle => {
   }
 
   return array;
+};
+
+export const generateId = () => {
+  return uuid();
 };
