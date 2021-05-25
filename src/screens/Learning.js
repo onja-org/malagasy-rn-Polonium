@@ -130,6 +130,7 @@ export default ({
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const phraseHeading = LANG_DATA[PHRASE_HEADING][nativeLanguage];
   const solutionHeading = LANG_DATA[SOLUTION_HEADING][nativeLanguage];
+
   const currentPhraseCategoryName = categories.find(category =>
     category.phrasesIds.find(phraseId => phraseId === currentPhrase?.id),
   );
