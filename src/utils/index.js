@@ -1,5 +1,7 @@
+import 'react-native-get-random-values';
 // returns shuffeled array without mutating original one
 // based on https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+import { LANGUAGE_NAMES } from '../data/dataUtils';
 
 export const shuffleArray = arrayToShuffle => {
   const array = [...arrayToShuffle];
@@ -18,6 +20,26 @@ export const shuffleArray = arrayToShuffle => {
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
   }
-
   return array;
+};
+
+// Set category name in seen phrases screen 
+export const getCurrentCategoryName = (
+  currentCategoryName,
+  isPhrases,
+  catNameInEnglish,
+  catNameInMalagasy,
+) => {
+  if (isPhrases) {
+    const phrasesCategory = {
+      id: 2,
+      name: {
+        en: catNameInEnglish,
+        mg: catNameInMalagasy,
+      },
+    };
+    return phrasesCategory?.name?.[LANGUAGE_NAMES.EN];
+  } else {
+    return currentCategoryName;
+  }
 };

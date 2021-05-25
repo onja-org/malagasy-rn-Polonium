@@ -41,10 +41,12 @@ export const getAllPhrases = () => {
 };
 
 export const findPhraseCategories = phraseId => {
-  return phrasesData.phrases;
+ return phrasesData.phrases;
 };
 
+
 export function findCategoryById(id) {
+  
   throw 'not implemented!';
   // TODO implement
 }

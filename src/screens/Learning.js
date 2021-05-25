@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {action} from '@storybook/addon-actions';
+import React, { useState, useEffect, useCallback } from 'react';
+import { action } from '@storybook/addon-actions';
 import {
   Text,
   View,
@@ -28,24 +28,29 @@ import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
 
-import {LANGUAGE_NAMES} from '../data/dataUtils';
-import {shuffleArray} from '../utils';
+import { LANGUAGE_NAMES } from '../data/dataUtils';
+import { shuffleArray, getCurrentCategoryName } from '../utils';
+// import { setSeenPhrases } from '../redux/actions';
 
 export default ({
   //nav provider
   navigation,
-
+  categories,
+  isSeenPhrases,
+  seenPhrases, 
   categoryPhrases,
   currentCategoryName,
-  nativeLanguage,
   setLanguageName,
+  addSeenPhrase,
+  removeFromSeenPhrases,
+  nativeLanguage,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
-  const [currentPhrase, setCurrentPhrase] = useState(null);
   const [answerOptions, setAnswerOptions] = useState([]);
   const [disableAllOptions, setDisableAllOptions] = useState(false);
   const [shouldReshuffle, setshouldReshuffle] = useState(false);
+  const [currentPhrase, setCurrentPhrase] = useState('');
 
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
@@ -62,21 +67,23 @@ export default ({
   const selectAnswerCallback = useCallback(
     item => {
       if (item.id === currentPhrase.id) {
-        // TODO add to learned
+        // TODO add to learned 
+        removeFromSeenPhrases(item)
       } else {
-        // TODO add to seen
+        if (seenPhrases.every(phrase => phrase?.id !== currentPhrase?.id)) {
+          addSeenPhrase(currentPhrase)
+        }
       }
-
       setDisableAllOptions(true);
-
       const answerOptionsWithSelected = answerOptions.map(phrase => {
-        return {...phrase, isSelected: phrase.id === item.id};
+        return { ...phrase, isSelected: phrase.id === item.id };
       });
 
       setAnswerOptions(answerOptionsWithSelected);
     },
-    [currentPhrase, setDisableAllOptions, answerOptions],
+    [currentPhrase, setDisableAllOptions, answerOptions, seenPhrases],
   );
+
   const nextAnswerCallback = useCallback(() => {
     if (!Boolean(phrasesLeft.length)) {
       setshouldReshuffle(true);
@@ -103,7 +110,6 @@ export default ({
     const newPhrase = phrasesLeftCopy.shift();
     setPhrasesLeft(phrasesLeftCopy);
     setCurrentPhrase(newPhrase);
-
     setAnswerOptionsCallback(originalAll, newPhrase);
   };
 
@@ -122,11 +128,27 @@ export default ({
   const categoryHeading = LANG_DATA[CATEGORY_HEADING][nativeLanguage];
   const phraseHeading = LANG_DATA[PHRASE_HEADING][nativeLanguage];
   const solutionHeading = LANG_DATA[SOLUTION_HEADING][nativeLanguage];
+  const currentPhraseCategoryName = categories.find(category =>
+    category.phrasesIds.find(phraseId => phraseId === currentPhrase?.id),
+  );
+
+  const getCategoryName = () => {
+    // Use the util function to get current category name
+    const enCategoryName = `Seen phrases - ${currentPhraseCategoryName?.name?.[LANGUAGE_NAMES.EN]}`;
+    const mgCategoryName = `Fehezanteny efa hita - ${currentPhraseCategoryName?.name?.[LANGUAGE_NAMES.MG]}`;
+
+    return getCurrentCategoryName(
+      currentCategoryName,
+      isSeenPhrases,
+      enCategoryName,
+      mgCategoryName     
+    )
+  }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
-        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+        <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
           <View style={styles.header}>
             <ToolBar
               button={
@@ -142,8 +164,8 @@ export default ({
               button={
                 <LanguageSwitcher
                   firstLanguage={LANGUAGE_NAMES.EN}
-                  LeftText="EN"
-                  RightText="MA"
+                  LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? 'MG' : 'EN'}
+                  RightText={nativeLanguage === LANGUAGE_NAMES.EN ? 'EN' : 'MG'}
                   color="#FFFFFF"
                   iconType=""
                   iconName="swap-horiz"
@@ -167,8 +189,8 @@ export default ({
             />
           </View>
           <View style={styles.heading}>
-            <SectionHeading text={categoryHeading} />
-            <Text>{currentCategoryName}</Text>
+            <SectionHeading text={categoryHeading} /> 
+            <Text>{getCategoryName()}</Text>
           </View>
           <View style={styles.heading}>
             <SectionHeading text={phraseHeading} />

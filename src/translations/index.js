@@ -7,6 +7,7 @@ export const LEARN_BUTTON_TEXT = 'LEARN_BUTTON_TEXT';
 export const PICK_BUTTON_TEXT = 'PICK_BUTTON_TEXT';
 export const NEXT_BUTTON_TEXT = 'NEXT_BUTTON_TEXT';
 export const RESHUFFLE_BUTTON_TEXT = 'RESHUFFLE_BUTTON_TEXT';
+export const ADD_BUTTON_TEXT = 'ADD_BUTTON_TEXT';
 
 export const SELECT_CATEGORY_HEADING = 'SELECT_CATEGORY_HEADING';
 export const SEEN_PHRASES_HEADING = 'SEEN_PHRASES_HEADING';
@@ -18,6 +19,11 @@ export const SOLUTION_HEADING = 'SOLUTION_HEADING';
 
 export const SHOULD_RESHUFFLE_TEXTAREA_CONTENT =
   'SHOULD_RESHUFFLE_TEXTAREA_CONTENT';
+
+export const ENGLISH_PHRASE_HEADING = 'ENGLISH_PHRASE_HEADING';
+export const MALAGASY_PHRASE_HEADING = 'MALAGASY_PHRASE_HEADING';
+export const PLACEHOLDER_NEW_TERM = 'PLACEHOLDER_NEW_TERM';
+export const CLOSE_BUTTON_TEXT = 'CLOSE_BUTTON_TEXT';
 
 export const LANG_DATA = {
   [ANSWER_CORRECT]: {
@@ -72,5 +78,25 @@ export const LANG_DATA = {
     [LANGUAGE_NAMES.EN]: 'You have answered all the questions in this category',
     [LANGUAGE_NAMES.MG]:
       "Efa voavalinao avokoa ny fanontaniana rehetra amin'ity sokajy ity",
+  },
+  [ENGLISH_PHRASE_HEADING]: {
+    [LANGUAGE_NAMES.EN]: 'The phrase in English: ',
+    [LANGUAGE_NAMES.MG]: "Ilay andianteny amin'ny teny Anglisy:",
+  },
+  [MALAGASY_PHRASE_HEADING]: {
+    [LANGUAGE_NAMES.EN]: 'The phrase in Malagasy: ',
+    [LANGUAGE_NAMES.MG]: "Ilay andianteny amin'ny teny Malagasy:",
+  },
+  [PLACEHOLDER_NEW_TERM]: {
+    [LANGUAGE_NAMES.EN]: 'Enter here ',
+    [LANGUAGE_NAMES.MG]: 'Midira eto ',
+  },
+  [ADD_BUTTON_TEXT]: {
+    [LANGUAGE_NAMES.EN]: 'Add ',
+    [LANGUAGE_NAMES.MG]: 'Ampio ',
+  },
+  [CLOSE_BUTTON_TEXT]: {
+    [LANGUAGE_NAMES.EN]: 'Close',
+    [LANGUAGE_NAMES.MG]: 'Akatona',
   },
 };
