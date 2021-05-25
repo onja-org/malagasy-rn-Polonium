@@ -5,13 +5,24 @@ import {
   setCurrentCategory,
   setPhrases,
   setLanguageName,
+  synchronizeStorageToRedux,
 } from '../redux/actions';
-import {categoriesRoot, nativeLanguageRoot} from '../redux/selectors';
+
+import {
+  categoriesRoot,
+  nativeLanguageRoot,
+  learntPhrases,
+  currentCategoryIdRoot,
+  isLearntPhrases,
+} from '../redux/selectors';
 
 function mapStateToProps(state) {
   return {
     categories: categoriesRoot(state),
     nativeLanguage: nativeLanguageRoot(state),
+    currentCategoryId: currentCategoryIdRoot(state),
+    learntPhrases: learntPhrases(state),
+    isLearntPhrases: isLearntPhrases(state),
   };
 }
 const mapDispatchToProps = {
@@ -19,6 +30,7 @@ const mapDispatchToProps = {
   setCurrentCategory,
   setPhrases,
   setLanguageName,
+  synchronizeStorageToRedux,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

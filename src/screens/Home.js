@@ -19,7 +19,6 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
 } from 'react-native';
-
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
 import ToolBar from '../components/ToolBar/ToolBar';
@@ -37,16 +36,19 @@ export default ({
   //state props
   categories,
   nativeLanguage,
+  learntPhrases,
   //actions
   setCategories,
   setCurrentCategory,
   setPhrases,
   setLanguageName,
+  synchronizeStorageToRedux,
 }) => {
   useEffect(() => {
     // fetch categories
     const categories = getAllCategories();
     setCategories(categories);
+    synchronizeStorageToRedux();
   }, []);
 
   const openCategoryPhrases = item => {
@@ -64,6 +66,25 @@ export default ({
   const learntPhrasesHeading =
     LANG_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
 
+  const openLearntPhrases = item => {
+    if (learntPhrases.length > 0) {
+      setCurrentCategory(item.id);
+      setPhrases(learntPhrases);
+      navigation.navigate('Learn');
+    }
+  };
+
+  const setLearntPhrasesRowText = () => {
+    const numberOfPhrases = learntPhrases.length;
+    if (numberOfPhrases === 0) {
+      return 'No learnt phrases yet';
+    } else if (numberOfPhrases === 1) {
+      return `${numberOfPhrases} word and phrase`;
+    } else {
+      return `${numberOfPhrases} words and phrases`;
+    }
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
@@ -79,9 +100,9 @@ export default ({
             <ToolBar
               button={
                 <LanguageSwitcher
-                  firstLanguage={nativeLanguage}
-                  LeftText="EN"
-                  RightText="MA"
+                  firstLanguage={LANGUAGE_NAMES.EN}
+                  LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? 'MG' : 'EN'}
+                  RightText={nativeLanguage === LANGUAGE_NAMES.EN ? 'EN' : 'MG'}
                   color="#FFFFFF"
                   iconType=""
                   iconName="swap-horiz"
@@ -145,12 +166,18 @@ export default ({
             <SectionHeading text={learntPhrasesHeading} />
           </View>
           <List
-            data={[{id: 2, name: '10 words and phrases'}]}
             text={learnButtonText}
+            data={[
+              {
+                id: '###learntPhrases###',
+                name: setLearntPhrasesRowText(),
+              },
+            ]}
+            text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            makeAction={() => {}}
+            makeAction={openLearntPhrases}
           />
         </View>
       </KeyboardAvoidingView>
