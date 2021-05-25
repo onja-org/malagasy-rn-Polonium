@@ -42,7 +42,6 @@ export default ({
   setCurrentCategory,
   setPhrases,
   setLanguageName,
-  showLearntPhrases,
   synchronizeStorageToRedux,
 }) => {
   useEffect(() => {
@@ -54,7 +53,6 @@ export default ({
 
   const openCategoryPhrases = item => {
     setCurrentCategory(item.id);
-    showLearntPhrases(false);
     // fetch Phrases for category
     const phrasesForCategory = getPhrasesForCategoryId(item.id);
     setPhrases(phrasesForCategory);
@@ -68,9 +66,9 @@ export default ({
   const learntPhrasesHeading =
     LANG_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
 
-  const openLearntPhrases = () => {
+  const openLearntPhrases = item => {
     if (learntPhrases.length > 0) {
-      showLearntPhrases(true);
+      setCurrentCategory(item.id);
       setPhrases(learntPhrases);
       navigation.navigate('Learn');
     }
@@ -167,11 +165,10 @@ export default ({
             <SectionHeading text={learntPhrasesHeading} />
           </View>
           <List
-            data={[{id: 2, name: '10 words and phrases'}]}
             text={learnButtonText}
             data={[
               {
-                id: 2,
+                id: '###learntPhrases###',
                 name: setlearntPhrasesRowText(),
               },
             ]}

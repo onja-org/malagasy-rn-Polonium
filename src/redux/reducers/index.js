@@ -50,16 +50,6 @@ function nativeLanguage(state = '', action) {
   }
 }
 
-// To show learnt phrases
-function showLearntPhrases(state = false, action) {
-  switch (action.type) {
-    case SHOW_LEARNT_PHRASES:
-      return action.payload;
-    default:
-      return state;
-  }
-}
-
 // Setting learnt phrases
 function learntPhrases(state = [], action) {
   switch (action.type) {
@@ -76,6 +66,5 @@ export default combineReducers({
   categories,
   categoryPhrases,
   nativeLanguage,
-  showLearntPhrases,
   learntPhrases,
 });

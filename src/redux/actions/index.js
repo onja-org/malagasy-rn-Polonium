@@ -5,7 +5,7 @@ import {
   SET_LANGUAGE_NAME,
   SET_CURRENT_CATEGORY,
   SET_LEARNT_PHRASES,
-  SHOW_LEARNT_PHRASES, 
+  SHOW_LEARNT_PHRASES,
 } from '../constants';
 import {
   LEARNT_PHRASES_KEY,
@@ -49,13 +49,6 @@ export function setLearntPhrases(phrase) {
   };
 }
 
-export function showLearntPhrases(shouldShow) {
-  return {
-    type: SHOW_LEARNT_PHRASES,
-    payload: shouldShow,
-  };
-}
-
 export function addLearntPhrases(phrase) {
   return async dispatch => {
     const storedLearntPhrases = await getDataFromStorage(LEARNT_PHRASES_KEY);
@@ -75,18 +68,14 @@ export function addLearntPhrases(phrase) {
 }
 
 // Updating learntPhrases after moving the incorrect anwers to seen phrases
-export function removeWrongAswerFromLearntPhrases(phrases) {
+export function removeWrongAswerFromLearntPhrases(phrase) {
   return async dispatch => {
     const storedLearntPhrases = await getDataFromStorage(LEARNT_PHRASES_KEY);
-    let itemsToStore = null;
-
-    if (!storedLearntPhrases) {
-      itemsToStore = phrases;
-    } else {
-      itemsToStore = phrases;
-    }
-    await setDataToStorage(LEARNT_PHRASES_KEY, itemsToStore);
-    dispatch(setLearntPhrases(itemsToStore));
+    const learntPhrasesWithoutWrongAnswer = storedLearntPhrases.filter(
+      learntPhrase => learntPhrase.id !== phrase.id,
+    );
+    await setDataToStorage(LEARNT_PHRASES_KEY, learntPhrasesWithoutWrongAnswer);
+    dispatch(setLearntPhrases(learntPhrasesWithoutWrongAnswer));
     return Promise.resolve();
   };
 }

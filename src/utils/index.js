@@ -26,11 +26,11 @@ export const shuffleArray = arrayToShuffle => {
 // Set category name in learnt phrases screen
 export const getCurrentCategoryName = (
   currentCategoryName,
-  shouldLearntPhraseDisplayed,
+  shouldPhrasesDisplayed,
   catNameInEnglish,
   catNameInMalagasy,
 ) => {
-  if (shouldLearntPhraseDisplayed) {
+  if (shouldPhrasesDisplayed) {
     const phrasesCategory = {
       id: 2,
       name: {

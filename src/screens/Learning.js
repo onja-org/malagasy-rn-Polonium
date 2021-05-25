@@ -39,7 +39,7 @@ export default ({
   nativeLanguage,
   setLanguageName,
   learntPhrases,
-  shouldLearntPhraseDisplayed,
+  isLearntPhrases,
   // actions
   addLearntPhrases,
   removeWrongAswerFromLearntPhrases,
@@ -50,7 +50,6 @@ export default ({
   const [answerOptions, setAnswerOptions] = useState([]);
   const [disableAllOptions, setDisableAllOptions] = useState(false);
   const [shouldReshuffle, setshouldReshuffle] = useState(false);
-
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
     setNewQuestionPhrase(categoryPhrases, categoryPhrases);
@@ -74,10 +73,7 @@ export default ({
         addLearntPhrases(item);
       } else {
         if (item.id !== currentPhrase.id) {
-          const learntPhrasesWithoutWrongAnswer = learntPhrases.filter(
-            phrase => phrase.id !== item.id,
-          );
-          removeWrongAswerFromLearntPhrases(learntPhrasesWithoutWrongAnswer);
+          removeWrongAswerFromLearntPhrases(item);
         }
         // TODO add to seen
       }
@@ -149,7 +145,7 @@ export default ({
     // Get category name function from utils
     return getCurrentCategoryName(
       currentCategoryName,
-      shouldLearntPhraseDisplayed,
+      isLearntPhrases,
       catNameInEnglish,
       catNameInMalagasy,
     );

@@ -11,7 +11,6 @@ import {
 import {
   categoriesRoot,
   nativeLanguageRoot,
-  shouldLearntPhraseDisplayed,
   learntPhrases,
   currentCategoryIdRoot,
 } from '../redux/selectors';
@@ -20,7 +19,6 @@ function mapStateToProps(state) {
   return {
     categories: categoriesRoot(state),
     nativeLanguage: nativeLanguageRoot(state),
-    shouldLearntPhraseDisplayed: shouldLearntPhraseDisplayed(state),
     currentCategoryId: currentCategoryIdRoot(state),
     learntPhrases: learntPhrases(state),
   };
