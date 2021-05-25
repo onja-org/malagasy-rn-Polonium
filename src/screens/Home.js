@@ -19,7 +19,6 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
 } from 'react-native';
-
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
 import ToolBar from '../components/ToolBar/ToolBar';
@@ -36,25 +35,48 @@ export default ({
   navigation,
   //state props
   categories,
+  learntPhrases,
   nativeLanguage,
+  seenPhrases,
   //actions
   setCategories,
   setCurrentCategory,
   setPhrases,
+  newTerms,
   setLanguageName,
+  synchronizeStorageToRedux,
 }) => {
   useEffect(() => {
     // fetch categories
+    synchronizeStorageToRedux();
     const categories = getAllCategories();
     setCategories(categories);
+    synchronizeStorageToRedux();
   }, []);
 
   const openCategoryPhrases = item => {
-    setCurrentCategory(item.id);
+    const categoryId = item.id;
+    setCurrentCategory(categoryId);
     // fetch Phrases for category
-    const phrasesForCategory = getPhrasesForCategoryId(item.id);
-    setPhrases(phrasesForCategory);
+    const phrasesForCategory = getPhrasesForCategoryId(categoryId);
+    const newTermsForCategory = newTerms.filter(
+      phrase => phrase.catId === categoryId,
+    );
+    const combinedPhrasesForCategory = [
+      ...phrasesForCategory,
+      ...newTermsForCategory,
+    ];
+    setPhrases(combinedPhrasesForCategory);
     navigation.navigate('Learn');
+  };
+
+  //Checks phrases in the seen phrases section
+  const openSeenPhrases = item => {
+    if (seenPhrases.length > 0) {
+      setCurrentCategory(item.id);
+      setPhrases(seenPhrases);
+      navigation.navigate('Learn');
+    }
   };
 
   const learnButtonText = LANG_DATA[LEARN_BUTTON_TEXT][nativeLanguage];
@@ -64,6 +86,35 @@ export default ({
   const learntPhrasesHeading =
     LANG_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
 
+  const openLearntPhrases = item => {
+    if (learntPhrases.length > 0) {
+      setCurrentCategory(item.id);
+      setPhrases(learntPhrases);
+      navigation.navigate('Learn');
+    }
+  };
+
+  const setLearntPhrasesRowText = () => {
+    const numberOfPhrases = learntPhrases.length;
+    if (numberOfPhrases === 0) {
+      return 'No learnt phrases yet';
+    } else if (numberOfPhrases === 1) {
+      return `${numberOfPhrases} word and phrase`;
+    } else {
+      return `${numberOfPhrases} words and phrases`;
+    }
+  };
+  // Number of the phrases in the seen phrases section
+  function seenPhrasesTotal() {
+    if (seenPhrases.length === 0) {
+      return 'No phrase';
+    } else if (seenPhrases.length === 1) {
+      return `${seenPhrases.length} word and a phrase.`;
+    } else {
+      return `${seenPhrases.length} words and phrases`;
+    }
+  }
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
@@ -71,7 +122,10 @@ export default ({
           <View style={styles.header}>
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
+                <ToolButton
+                  onPress={() => {
+                    navigation.navigate('Add');
+                  }}>
                   <AddIcon width={24} height={24} fill="#FFFFFF" />
                 </ToolButton>
               }
@@ -79,9 +133,9 @@ export default ({
             <ToolBar
               button={
                 <LanguageSwitcher
-                  firstLanguage={nativeLanguage}
-                  LeftText="EN"
-                  RightText="MA"
+                  firstLanguage={LANGUAGE_NAMES.EN}
+                  LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? 'MG' : 'EN'}
+                  RightText={nativeLanguage === LANGUAGE_NAMES.EN ? 'EN' : 'MG'}
                   color="#FFFFFF"
                   iconType=""
                   iconName="swap-horiz"
@@ -134,23 +188,29 @@ export default ({
             <SectionHeading text={seenPhrasesHeading} />
           </View>
           <List
-            data={[{id: 1, name: '35 words and phrases'}]}
+            data={[{id: '###seenPhrases###', name: seenPhrasesTotal()}]}
             text={learnButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            makeAction={() => {}}
+            makeAction={openSeenPhrases}
           />
           <View style={styles.heading}>
             <SectionHeading text={learntPhrasesHeading} />
           </View>
           <List
-            data={[{id: 2, name: '10 words and phrases'}]}
             text={learnButtonText}
+            data={[
+              {
+                id: '###learntPhrases###',
+                name: setLearntPhrasesRowText(),
+              },
+            ]}
+            text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            makeAction={() => {}}
+            makeAction={openLearntPhrases}
           />
         </View>
       </KeyboardAvoidingView>
