@@ -5,7 +5,6 @@ import {
   SET_LANGUAGE_NAME,
   SET_CURRENT_CATEGORY,
   SET_LEARNT_PHRASES,
-  SHOW_LEARNT_PHRASES,
 } from '../constants';
 import {
   LEARNT_PHRASES_KEY,
