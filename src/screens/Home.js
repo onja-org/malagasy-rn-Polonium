@@ -79,9 +79,9 @@ export default ({
             <ToolBar
               button={
                 <LanguageSwitcher
-                  firstLanguage={nativeLanguage}
-                  LeftText="EN"
-                  RightText="MA"
+                  firstLanguage={LANGUAGE_NAMES.EN}
+                  LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? 'MG' : 'EN'}
+                  RightText={nativeLanguage === LANGUAGE_NAMES.EN ? 'EN' : 'MG'}
                   color="#FFFFFF"
                   iconType=""
                   iconName="swap-horiz"
