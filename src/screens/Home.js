@@ -126,11 +126,7 @@ export default ({
             />
             <ToolBar
               button={
-                <ToolButton
-                  onPress={openLearntPhrases({
-                    id: '###learntPhrases###',
-                    name: setCurrentCategoryName(),
-                  })}>
+                <ToolButton onPress={openLearntPhrases()}>
                   <CheckAllIcon width={24} height={24} fill="#FFFFFF" />
                 </ToolButton>
               }
