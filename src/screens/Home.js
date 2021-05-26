@@ -74,13 +74,14 @@ export default ({
     }
   };
 
-  const setlearntPhrasesRowText = () => {
-    if (learntPhrases.length === 0) {
-      return `No learnt phrases yet`;
-    } else if (learntPhrases.length === 1) {
-      return `${learntPhrases.length} word and phrase`;
+  const setCurrentCategoryName = () => {
+    const numberOfPhrases = learntPhrases.length;
+    if (numberOfPhrases === 0) {
+      return 'No learnt phrases yet';
+    } else if (numberOfPhrases === 1) {
+      return `${numberOfPhrases} word and phrase`;
     } else {
-      return `${learntPhrases.length} words and phrases`;
+      return `${numberOfPhrases} words and phrases`;
     }
   };
 
@@ -99,9 +100,9 @@ export default ({
             <ToolBar
               button={
                 <LanguageSwitcher
-                  firstLanguage={nativeLanguage}
-                  LeftText="EN"
-                  RightText="MA"
+                  firstLanguage={LANGUAGE_NAMES.EN}
+                  LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? 'MG' : 'EN'}
+                  RightText={nativeLanguage === LANGUAGE_NAMES.EN ? 'EN' : 'MG'}
                   color="#FFFFFF"
                   iconType=""
                   iconName="swap-horiz"
@@ -125,7 +126,11 @@ export default ({
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
+                <ToolButton
+                  onPress={openLearntPhrases({
+                    id: '###learntPhrases###',
+                    name: setCurrentCategoryName(),
+                  })}>
                   <CheckAllIcon width={24} height={24} fill="#FFFFFF" />
                 </ToolButton>
               }
@@ -169,7 +174,7 @@ export default ({
             data={[
               {
                 id: '###learntPhrases###',
-                name: setlearntPhrasesRowText(),
+                name: setCurrentCategoryName(),
               },
             ]}
             text={'Learn'}
