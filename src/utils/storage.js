@@ -12,7 +12,6 @@ export async function setDataToStorage(storageKey, value) {
 
 export async function getDataFromStorage(storagekey) {
   try {
-    // AsyncStorage.clear();
     const jsonValue = await AsyncStorage.getItem(storagekey);
     return JSON.parse(jsonValue);
   } catch (e) {
