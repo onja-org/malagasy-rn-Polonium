@@ -42,18 +42,29 @@ export default ({
   setCurrentCategory,
   setPhrases,
   setLanguageName,
+  newTerms,
+  synchronizeStorageToRedux,
 }) => {
   useEffect(() => {
     // fetch categories
+    synchronizeStorageToRedux();
     const categories = getAllCategories();
     setCategories(categories);
   }, []);
 
   const openCategoryPhrases = item => {
-    setCurrentCategory(item.id);
+    const categoryId = item.id;
+    setCurrentCategory(categoryId);
     // fetch Phrases for category
-    const phrasesForCategory = getPhrasesForCategoryId(item.id);
-    setPhrases(phrasesForCategory);
+    const phrasesForCategory = getPhrasesForCategoryId(categoryId);
+    const newTermsForCategory = newTerms.filter(
+      phrase => phrase.catId === categoryId,
+    );
+    const combinedPhrasesForCategory = [
+      ...phrasesForCategory,
+      ...newTermsForCategory,
+    ];
+    setPhrases(combinedPhrasesForCategory);
     navigation.navigate('Learn');
   };
 
@@ -71,7 +82,10 @@ export default ({
           <View style={styles.header}>
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
+                <ToolButton
+                  onPress={() => {
+                    navigation.navigate('Add');
+                  }}>
                   <AddIcon width={24} height={24} fill="#FFFFFF" />
                 </ToolButton>
               }
