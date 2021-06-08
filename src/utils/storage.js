@@ -10,6 +10,7 @@ export const setDataToStorage = async (storageKey, phrase) => {
     alert(e);
   }
 };
+
 export const getDataFromStorage = async storageKey => {
   try {
     const jsonValue = await AsyncStorage.getItem(storageKey);

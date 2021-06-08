@@ -48,15 +48,16 @@ export default ({
 }) => {
   useEffect(() => {
     // fetch categories
+    synchronizeStorageToRedux();
     const categories = getAllCategories();
     setCategories(categories);
     synchronizeStorageToRedux()
   }, []);
 
   const openCategoryPhrases = item => {
-    setCurrentCategory(item.id);
-    // fetch Phrases for category
     const categoryId = item.id;
+    setCurrentCategory(categoryId);
+    // fetch Phrases for category
     const phrasesForCategory = getPhrasesForCategoryId(categoryId);
     const newTermsForCategory = newTerms.filter(
       phrase => phrase.catId === categoryId,

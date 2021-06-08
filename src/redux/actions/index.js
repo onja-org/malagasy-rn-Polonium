@@ -83,14 +83,13 @@ export function setNewTerms(newTerms) {
 export function addNewTerm(newTerm) {
   return async dispatch => {
     const storedNewTerms = await getDataFromStorage(NEW_TERMS_KEY);
-
     let newTermsToStore = null;
     if (!storedNewTerms) {
       newTermsToStore = [newTerm];
     } else {
       newTermsToStore = [...storedNewTerms, newTerm];
     }
-    await storeData(NEW_TERMS_KEY, newTermsToStore);
+    await setDataToStorage(NEW_TERMS_KEY, newTermsToStore);
     dispatch(setNewTerms(newTermsToStore));
 
     return Promise.resolve();
