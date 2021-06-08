@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {action} from '@storybook/addon-actions';
+import React, { useEffect } from 'react';
+import { action } from '@storybook/addon-actions';
 import {
   LANGUAGE_NAMES,
   getPhrasesForCategoryId,
@@ -36,13 +36,14 @@ export default ({
   navigation,
   //state props
   categories,
-  nativeLanguage,
+  nativeLanguage, 
+  seenPhrases,
   //actions
   setCategories,
   setCurrentCategory,
   setPhrases,
-  setLanguageName,
   newTerms,
+  setLanguageName,
   synchronizeStorageToRedux,
 }) => {
   useEffect(() => {
@@ -50,6 +51,7 @@ export default ({
     synchronizeStorageToRedux();
     const categories = getAllCategories();
     setCategories(categories);
+    synchronizeStorageToRedux()
   }, []);
 
   const openCategoryPhrases = item => {
@@ -68,6 +70,15 @@ export default ({
     navigation.navigate('Learn');
   };
 
+  //Checks phrases in the seen phrases section
+  const openSeenPhrases = (item) => {
+    if (seenPhrases.length > 0) {
+      setCurrentCategory(item.id);
+      setPhrases(seenPhrases); 
+      navigation.navigate('Learn');
+    }
+  }
+
   const learnButtonText = LANG_DATA[LEARN_BUTTON_TEXT][nativeLanguage];
   const selectCategoryHeading =
     LANG_DATA[SELECT_CATEGORY_HEADING][nativeLanguage];
@@ -75,10 +86,22 @@ export default ({
   const learntPhrasesHeading =
     LANG_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
 
+  // Number of the phrases in the seen phrases section
+  function seenPhrasesTotal() {
+    if (seenPhrases.length === 0) {
+      return 'No phrase'
+    } else if (seenPhrases.length === 1) {
+      return `${seenPhrases.length} word and a phrase.`
+    }else {
+      return `${seenPhrases.length} words and phrases`
+    } 
+  }
+
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
-        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+        <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
+
           <View style={styles.header}>
             <ToolBar
               button={
@@ -148,23 +171,23 @@ export default ({
             <SectionHeading text={seenPhrasesHeading} />
           </View>
           <List
-            data={[{id: 1, name: '35 words and phrases'}]}
+            data={[{ id: "###seenPhrases###", name: seenPhrasesTotal() }]}
             text={learnButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            makeAction={() => {}}
+            makeAction={openSeenPhrases}
           />
           <View style={styles.heading}>
             <SectionHeading text={learntPhrasesHeading} />
           </View>
           <List
-            data={[{id: 2, name: '10 words and phrases'}]}
+            data={[{ id: 2, name: '10 words and phrases' }]}
             text={learnButtonText}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
-            makeAction={() => {}}
+            makeAction={() => { }}
           />
         </View>
       </KeyboardAvoidingView>
@@ -180,4 +203,4 @@ const styles = StyleSheet.create({
   heading: {
     paddingBottom: 15,
   },
-});
+})
