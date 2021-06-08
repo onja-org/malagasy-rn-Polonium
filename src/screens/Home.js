@@ -1,4 +1,4 @@
- import React, {useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {action} from '@storybook/addon-actions';
 import {
   LANGUAGE_NAMES,
@@ -74,6 +74,12 @@ export default ({
     }
   };
 
+  const openLearntPhrasesByButton = () => {
+    openLearntPhrases({
+      id: '###learntPhrases###',
+    });
+  };
+
   const setLearntPhrasesRowText = () => {
     const numberOfPhrases = learntPhrases.length;
     if (numberOfPhrases === 0) {
@@ -126,7 +132,7 @@ export default ({
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
+                <ToolButton onPress={openLearntPhrasesByButton}>
                   <CheckAllIcon width={24} height={24} fill="#FFFFFF" />
                 </ToolButton>
               }
