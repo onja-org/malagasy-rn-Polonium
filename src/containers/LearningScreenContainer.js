@@ -1,4 +1,4 @@
-import {connect} from 'react-redux';
+ import {connect} from 'react-redux';
 import Learning from '../screens/Learning';
 import {
   categoryPhrasesRoot,

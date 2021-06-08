@@ -1,4 +1,4 @@
-import {LANGUAGE_NAMES} from '../data/dataUtils';
+ import {LANGUAGE_NAMES} from '../data/dataUtils';
 
 export default {
   categories: [],

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+ import React, {useEffect} from 'react';
 import {action} from '@storybook/addon-actions';
 import {
   LANGUAGE_NAMES,

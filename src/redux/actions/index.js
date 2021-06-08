@@ -1,4 +1,4 @@
-// import all of the constants from contants folder
+ // import all of the constants from contants folder
 import {
   SET_CATEGORIES,
   SET_PHRASES,
@@ -70,7 +70,7 @@ export function addLearntPhrases(phrase) {
 export function removeWrongAswerFromLearntPhrases(phrase) {
   return async dispatch => {
     const storedLearntPhrases = await getDataFromStorage(LEARNT_PHRASES_KEY);
-    const learntPhrasesWithoutWrongAnswer = storedLearntPhrases?.filter(
+    const learntPhrasesWithoutWrongAnswer = storedLearntPhrases.filter(
       learntPhrase => learntPhrase.id !== phrase.id,
     );
     await setDataToStorage(LEARNT_PHRASES_KEY, learntPhrasesWithoutWrongAnswer);

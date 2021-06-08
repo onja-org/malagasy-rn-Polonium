@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+ import AsyncStorage from '@react-native-community/async-storage';
 export const LEARNT_PHRASES_KEY = '@malagasyApp//learntPhrases';
 
 export async function setDataToStorage(storageKey, value) {
