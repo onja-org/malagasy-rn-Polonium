@@ -5,7 +5,6 @@ export const LANGUAGE_NAMES = {
   MG: 'mg',
   EN: 'en',
 };
-
 /// API exposed - we are using async to be ready for external source of data
 
 export const getAllCategories = () => {

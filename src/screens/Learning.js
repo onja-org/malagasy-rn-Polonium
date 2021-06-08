@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { action } from '@storybook/addon-actions';
+ import React, {useState, useEffect, useCallback} from 'react';
+import {action} from '@storybook/addon-actions';
 import {
   Text,
   View,
@@ -27,38 +27,36 @@ import ToolButton from '../components/ToolButton/ToolButton';
 import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
-
-import { LANGUAGE_NAMES } from '../data/dataUtils';
-import { shuffleArray, getCurrentCategoryName } from '../utils';
-// import { setSeenPhrases } from '../redux/actions';
-
+import {LANGUAGE_NAMES} from '../data/dataUtils';
+import {shuffleArray, getCurrentCategoryName} from '../utils';
 export default ({
   //nav provider
   navigation,
+
   categories,
-  isSeenPhrases,
-  seenPhrases, 
   categoryPhrases,
   currentCategoryName,
   setLanguageName,
-  addSeenPhrase,
-  removeFromSeenPhrases,
   nativeLanguage,
+  learntPhrases,
+  isLearntPhrases,
+  // actions
+  addLearntPhrases,
+  removeWrongAswerFromLearntPhrases,
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
+  const [currentPhrase, setCurrentPhrase] = useState(null);
   const [answerOptions, setAnswerOptions] = useState([]);
   const [disableAllOptions, setDisableAllOptions] = useState(false);
   const [shouldReshuffle, setshouldReshuffle] = useState(false);
-  const [currentPhrase, setCurrentPhrase] = useState('');
-
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
     setNewQuestionPhrase(categoryPhrases, categoryPhrases);
   }, [categoryPhrases]);
 
   const setAnswerOptionsCallback = (original, current) => {
-    const originWithoutCurrent = original.filter(phr => phr.id !== current.id);
+    const originWithoutCurrent = original.filter(phr => phr.id !== current?.id);
     const randomFromAll = shuffleArray(originWithoutCurrent).slice(0, 3);
     const randomWithCorrect = shuffleArray([...randomFromAll, current]);
     setAnswerOptions(randomWithCorrect);
@@ -66,22 +64,26 @@ export default ({
 
   const selectAnswerCallback = useCallback(
     item => {
-      if (item.id === currentPhrase.id) {
-        // TODO add to learned 
-        removeFromSeenPhrases(item)
+      // Check if the item is not in learnt phrases yet
+      const isItemNotExist = learntPhrases?.every(
+        phrase => phrase?.id !== item.id,
+      );
+
+      if (item.id === currentPhrase.id && isItemNotExist) {
+        addLearntPhrases(item);
       } else {
-        if (seenPhrases.every(phrase => phrase?.id !== currentPhrase?.id)) {
-          addSeenPhrase(currentPhrase)
+        if (item.id !== currentPhrase.id) {
+          removeWrongAswerFromLearntPhrases(item);
         }
+        // TODO add to seen
       }
       setDisableAllOptions(true);
       const answerOptionsWithSelected = answerOptions.map(phrase => {
-        return { ...phrase, isSelected: phrase.id === item.id };
+        return {...phrase, isSelected: phrase.id === item.id};
       });
-
       setAnswerOptions(answerOptionsWithSelected);
     },
-    [currentPhrase, setDisableAllOptions, answerOptions, seenPhrases],
+    [currentPhrase, setDisableAllOptions, answerOptions],
   );
 
   const nextAnswerCallback = useCallback(() => {
@@ -133,22 +135,26 @@ export default ({
   );
 
   const getCategoryName = () => {
-    // Use the util function to get current category name
-    const enCategoryName = `Seen phrases - ${currentPhraseCategoryName?.name?.[LANGUAGE_NAMES.EN]}`;
-    const mgCategoryName = `Fehezanteny efa hita - ${currentPhraseCategoryName?.name?.[LANGUAGE_NAMES.MG]}`;
+    const catNameInEnglish = `Learnt phrases - ${
+      currentPhraseCategoryName?.name[LANGUAGE_NAMES.EN]
+    }`;
+    const catNameInMalagasy = `Fehezanteny efa nianarana - ${
+      currentPhraseCategoryName?.name[LANGUAGE_NAMES.MG]
+    }`;
 
+    // Get category name function from utils
     return getCurrentCategoryName(
       currentCategoryName,
-      isSeenPhrases,
-      enCategoryName,
-      mgCategoryName     
-    )
-  }
+      isLearntPhrases,
+      catNameInEnglish,
+      catNameInMalagasy,
+    );
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-        <View style={{ paddingHorizontal: 35, paddingVertical: 23 }}>
+    <SafeAreaView style={{flex: 1}}>
+      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
           <View style={styles.header}>
             <ToolBar
               button={
@@ -189,8 +195,8 @@ export default ({
             />
           </View>
           <View style={styles.heading}>
-            <SectionHeading text={categoryHeading} /> 
-            <Text>{getCategoryName()}</Text>
+            <SectionHeading text={categoryHeading} />
+            <Text> {getCategoryName()} </Text>
           </View>
           <View style={styles.heading}>
             <SectionHeading text={phraseHeading} />

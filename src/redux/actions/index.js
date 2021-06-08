@@ -1,14 +1,16 @@
-import { setDataToStorage, getDataFromStorage, NEW_TERMS_KEY, SEEN_PHRASES_KEY } from '../../utils/storage';
-
-// // import all of the constants from contants folder
+ // import all of the constants from contants folder
 import {
   SET_CATEGORIES,
   SET_PHRASES,
   SET_LANGUAGE_NAME,
   SET_CURRENT_CATEGORY,
-  SET_SEEN_PHRASE,
-  SET_NEW_TERMS,
+  SET_LEARNT_PHRASES,
 } from '../constants';
+import {
+  LEARNT_PHRASES_KEY,
+  setDataToStorage,
+  getDataFromStorage,
+} from '../../utils/storage';
 
 // categories actions
 export function setCategories(categories) {
@@ -37,78 +39,55 @@ export function setLanguageName(language) {
     type: SET_LANGUAGE_NAME,
     payload: language,
   };
-} 
-
-export function setSeenPhrases(seenPhrases) {
-  return {
-    type: SET_SEEN_PHRASE,
-    payload: seenPhrases,
-  }
 }
 
-export function addSeenPhrase(phrase) {
+export function setLearntPhrases(phrase) {
+  return {
+    type: SET_LEARNT_PHRASES,
+    payload: phrase,
+  };
+}
+
+export function addLearntPhrases(phrase) {
   return async dispatch => {
-    const storedSeenPhrases = await getDataFromStorage(SEEN_PHRASES_KEY);
+    const storedLearntPhrases = await getDataFromStorage(LEARNT_PHRASES_KEY);
     let itemsToStore = null;
-    if (!storedSeenPhrases) {
+
+    if (!storedLearntPhrases) {
       itemsToStore = [phrase];
     } else {
-      itemsToStore = [...storedSeenPhrases, phrase];
+      itemsToStore = [...storedLearntPhrases, phrase];
     }
-    await setDataToStorage(SEEN_PHRASES_KEY, itemsToStore);
-    dispatch(setSeenPhrases(itemsToStore));
+
+    await setDataToStorage(LEARNT_PHRASES_KEY, itemsToStore);
+
+    dispatch(setLearntPhrases(itemsToStore));
     return Promise.resolve();
   };
 }
 
-export function removeFromSeenPhrases(seenPhrase) {
+// Updating learntPhrases after moving the incorrect anwers to seen phrases
+export function removeWrongAswerFromLearntPhrases(phrase) {
   return async dispatch => {
-    const storedSeenPhrases = await getDataFromStorage(SEEN_PHRASES_KEY);
-    let itemsToStore = storedSeenPhrases.filter(
-      phrase => phrase.id !== seenPhrase.id,
+    const storedLearntPhrases = await getDataFromStorage(LEARNT_PHRASES_KEY);
+    const learntPhrasesWithoutWrongAnswer = storedLearntPhrases.filter(
+      learntPhrase => learntPhrase.id !== phrase.id,
     );
-    await setDataToStorage(SEEN_PHRASES_KEY, itemsToStore);
-    dispatch(setSeenPhrases(itemsToStore));
-    return Promise.resolve();
-  };
-}
-
-export function setNewTerms(newTerms) {
-  return {
-    type: SET_NEW_TERMS,
-    payload: newTerms,
-  };
-}
-
-export function addNewTerm(newTerm) {
-  return async dispatch => {
-    const storedNewTerms = await getDataFromStorage(NEW_TERMS_KEY);
-    let newTermsToStore = null;
-    if (!storedNewTerms) {
-      newTermsToStore = [newTerm];
-    } else {
-      newTermsToStore = [...storedNewTerms, newTerm];
-    }
-    await setDataToStorage(NEW_TERMS_KEY, newTermsToStore);
-    dispatch(setNewTerms(newTermsToStore));
-
+    await setDataToStorage(LEARNT_PHRASES_KEY, learntPhrasesWithoutWrongAnswer);
+    dispatch(setLearntPhrases(learntPhrasesWithoutWrongAnswer));
     return Promise.resolve();
   };
 }
 
 export function synchronizeStorageToRedux() {
   return async dispatch => {
-    const storedNewTerms = await getDataFromStorage(NEW_TERMS_KEY);
-    if (storedNewTerms) {
-      dispatch(setNewTerms(storedNewTerms));
+    const storedLearntPhrases = await getDataFromStorage(LEARNT_PHRASES_KEY);
+
+    if (!storedLearntPhrases) {
+      return Promise.resolve();
     }
-    
-    const storedSeenPhrases = await getDataFromStorage(SEEN_PHRASES_KEY);
-    if (storedSeenPhrases) {
-      dispatch(setSeenPhrases(storedSeenPhrases));
-    }
-   
+
+    dispatch(setLearntPhrases(storedLearntPhrases));
     return Promise.resolve();
   };
 }
-

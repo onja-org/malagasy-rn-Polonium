@@ -1,14 +1,13 @@
-import {createSelector} from 'reselect';
+ import {createSelector} from 'reselect';
 
 export const categoriesRoot = state => state.categories;
 export const nativeLanguageRoot = state => state.nativeLanguage;
 export const categoryPhrasesRoot = state => {
   return state.categoryPhrases;
-}; 
-export const seenPhrasesRoot = state => state.seenPhrases;
+};
 export const randomPhrase = state => state.randomPhrase;
 export const currentCategoryIdRoot = state => state.currentCategoryId;
-export const newTermsRoot = state => state.newTerms;
+export const learntPhrases = state => state.learntPhrases;
 
 export const currentCategory = createSelector(
   [currentCategoryIdRoot, categoriesRoot],
@@ -20,11 +19,10 @@ export const currentCategory = createSelector(
   },
 );
 
-export const isSeenPhrases = createSelector(
+export const isLearntPhrases = createSelector(
   [currentCategoryIdRoot],
-  (selectedCategoryId) => {
-    const selectedCategory = "###seenPhrases###" === selectedCategoryId
-    return selectedCategory;
+  selectedCategoryId => {
+    return '###learntPhrases###' === selectedCategoryId;
   },
 );
 
@@ -34,7 +32,6 @@ export const currentCategoryPhrasesIds = createSelector(
     return selectedCategory.phrasesIds;
   },
 );
-
 export const currentCategoryName = createSelector(
   [currentCategory, nativeLanguageRoot],
   (selectedCategory, language) => {
@@ -42,4 +39,3 @@ export const currentCategoryName = createSelector(
     return name;
   },
 );
-
