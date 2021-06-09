@@ -1,4 +1,4 @@
-import {LANGUAGE_NAMES} from '../data/dataUtils';
+ import {LANGUAGE_NAMES} from '../data/dataUtils';
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
 // returns shuffeled array without mutating original one

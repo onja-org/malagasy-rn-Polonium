@@ -1,4 +1,4 @@
-// import all of the constants from contants folder
+ // import all of the constants from contants folder
 import {
   setDataToStorage,
   getDataFromStorage,
