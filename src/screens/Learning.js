@@ -34,9 +34,13 @@ export default ({
   navigation,
 
   categories,
+  isSeenPhrases,
+  seenPhrases,
   categoryPhrases,
   currentCategoryName,
   setLanguageName,
+  addSeenPhrase,
+  removeFromSeenPhrases,
   nativeLanguage,
   learntPhrases,
   isLearntPhrases,
@@ -46,10 +50,11 @@ export default ({
 }) => {
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
-  const [currentPhrase, setCurrentPhrase] = useState(null);
   const [answerOptions, setAnswerOptions] = useState([]);
   const [disableAllOptions, setDisableAllOptions] = useState(false);
   const [shouldReshuffle, setshouldReshuffle] = useState(false);
+  const [currentPhrase, setCurrentPhrase] = useState('');
+
   useEffect(() => {
     setOriginalPhrases(categoryPhrases);
     setNewQuestionPhrase(categoryPhrases, categoryPhrases);
@@ -71,11 +76,14 @@ export default ({
 
       if (item.id === currentPhrase.id && isItemNotExist) {
         addLearntPhrases(item);
+        removeFromSeenPhrases(item);
       } else {
         if (item.id !== currentPhrase.id) {
           removeWrongAswerFromLearntPhrases(item);
         }
-        // TODO add to seen
+        if (seenPhrases.every(phrase => phrase?.id !== currentPhrase?.id)) {
+          addSeenPhrase(currentPhrase);
+        }
       }
       setDisableAllOptions(true);
       const answerOptionsWithSelected = answerOptions.map(phrase => {
@@ -83,7 +91,7 @@ export default ({
       });
       setAnswerOptions(answerOptionsWithSelected);
     },
-    [currentPhrase, setDisableAllOptions, answerOptions],
+    [currentPhrase, setDisableAllOptions, answerOptions, seenPhrases],
   );
 
   const nextAnswerCallback = useCallback(() => {
@@ -134,7 +142,7 @@ export default ({
     category.phrasesIds.find(phraseId => phraseId === currentPhrase?.id),
   );
 
-  const getCategoryName = () => {
+  const getLearntPhrasesCategoryName = () => {
     const catNameInEnglish = `Learnt phrases - ${
       currentPhraseCategoryName?.name[LANGUAGE_NAMES.EN]
     }`;
@@ -148,6 +156,23 @@ export default ({
       isLearntPhrases,
       catNameInEnglish,
       catNameInMalagasy,
+    );
+  };
+
+  const getSeenPhrasesCategoryName = () => {
+    // Use the util function to get current category name
+    const enCategoryName = `Seen phrases - ${
+      currentPhraseCategoryName?.name?.[LANGUAGE_NAMES.EN]
+    }`;
+    const mgCategoryName = `Fehezanteny efa hita - ${
+      currentPhraseCategoryName?.name?.[LANGUAGE_NAMES.MG]
+    }`;
+
+    return getCurrentCategoryName(
+      currentCategoryName,
+      isSeenPhrases,
+      enCategoryName,
+      mgCategoryName,
     );
   };
 
@@ -196,7 +221,12 @@ export default ({
           </View>
           <View style={styles.heading}>
             <SectionHeading text={categoryHeading} />
-            <Text> {getCategoryName()} </Text>
+            <Text>
+              {' '}
+              {isSeenPhrases
+                ? getSeenPhrasesCategoryName()
+                : getLearntPhrasesCategoryName()}{' '}
+            </Text>
           </View>
           <View style={styles.heading}>
             <SectionHeading text={phraseHeading} />

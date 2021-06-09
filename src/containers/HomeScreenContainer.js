@@ -1,11 +1,11 @@
- import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Home from '../screens/Home';
 import {
   setCategories,
   setCurrentCategory,
   setPhrases,
   setLanguageName,
-  synchronizeStorageToRedux,
+  synchronizeStorageToRedux
 } from '../redux/actions';
 
 import {
@@ -14,6 +14,8 @@ import {
   learntPhrases,
   currentCategoryIdRoot,
   isLearntPhrases,
+  newTermsRoot,
+  seenPhrasesRoot,
 } from '../redux/selectors';
 
 function mapStateToProps(state) {
@@ -23,8 +25,11 @@ function mapStateToProps(state) {
     currentCategoryId: currentCategoryIdRoot(state),
     learntPhrases: learntPhrases(state),
     isLearntPhrases: isLearntPhrases(state),
-  };
+    seenPhrases: seenPhrasesRoot(state),
+    newTerms: newTermsRoot(state),
+  }
 }
+
 const mapDispatchToProps = {
   setCategories,
   setCurrentCategory,

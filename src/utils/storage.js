@@ -1,5 +1,7 @@
- import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 export const LEARNT_PHRASES_KEY = '@malagasyApp//learntPhrases';
+export const NEW_TERMS_KEY = '@malagasyApp/newTermsKey';
+export const SEEN_PHRASES_KEY = '@SEEN_PHRASES_KEY';
 
 export async function setDataToStorage(storageKey, value) {
   try {
@@ -17,4 +19,5 @@ export async function getDataFromStorage(storagekey) {
   } catch (e) {
     alert(e);
   }
-}
+} 
+
