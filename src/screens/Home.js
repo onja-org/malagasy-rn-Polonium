@@ -94,6 +94,12 @@ export default ({
     }
   };
 
+  const openSeenPhrasesByButton = () => {
+    openSeenPhrases({
+      id: '###seenPhrases###',
+    });
+  };
+
   const setLearntPhrasesRowText = () => {
     const numberOfPhrases = learntPhrases.length;
     if (numberOfPhrases === 0) {
@@ -152,7 +158,7 @@ export default ({
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
+                <ToolButton onPress={openSeenPhrasesByButton}>
                   <CheckIcon width={24} height={24} fill="#FFFFFF" />
                 </ToolButton>
               }
