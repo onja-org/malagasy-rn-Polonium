@@ -1,4 +1,4 @@
- // import all of the constants from contants folder
+// import all of the constants from contants folder
 import {
   setDataToStorage,
   getDataFromStorage,
@@ -16,6 +16,7 @@ import {
   SET_LEARNT_PHRASES,
   SET_SEEN_PHRASE,
   SET_NEW_TERMS,
+  SWITCH_THEME,
 } from '../constants';
 
 // categories actions
@@ -115,6 +116,11 @@ export function removeWrongAswerFromLearntPhrases(phrase) {
     );
     await setDataToStorage(LEARNT_PHRASES_KEY, learntPhrasesWithoutWrongAnswer);
     dispatch(setLearntPhrases(learntPhrasesWithoutWrongAnswer));
+  };
+}
+export function switchTheme() {
+  return {
+    type: SWITCH_THEME,
   };
 }
 

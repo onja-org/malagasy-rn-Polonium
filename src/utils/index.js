@@ -1,4 +1,4 @@
- import {LANGUAGE_NAMES} from '../data/dataUtils';
+import {LANGUAGE_NAMES} from '../data/dataUtils';
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
 // returns shuffeled array without mutating original one
@@ -28,18 +28,19 @@ export const shuffleArray = arrayToShuffle => {
 export const getCurrentCategoryName = (
   currentCategoryName,
   isPhrases,
+  nativeLanguage,
   catNameInEnglish,
   catNameInMalagasy,
 ) => {
   if (isPhrases) {
     const phrasesCategory = {
       id: 'learntPhrases',
-      name: {
-        en: catNameInEnglish,
-        mg: catNameInMalagasy,
-      },
+      name:
+        nativeLanguage === LANGUAGE_NAMES.EN
+          ? catNameInEnglish
+          : catNameInMalagasy,
     };
-    return phrasesCategory?.name?.[LANGUAGE_NAMES.EN];
+    return phrasesCategory?.name;
   } else {
     return currentCategoryName;
   }

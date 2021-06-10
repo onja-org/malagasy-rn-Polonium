@@ -11,6 +11,9 @@ import {
   SELECT_CATEGORY_HEADING,
   SEEN_PHRASES_HEADING,
   LEARNT_PHRASES_HEADING,
+  NO_SEEN_AND_LEARNT_PHRASES_TEXT,
+  SINGLE_PHRASE_TEXT,
+  MULTIPLE_PHRASES_TEXT,
 } from '../translations';
 
 import {
@@ -45,7 +48,11 @@ export default ({
   newTerms,
   setLanguageName,
   synchronizeStorageToRedux,
+  themeMode,
+  switchTheme,
 }) => {
+  const {colors} = themeMode;
+
   useEffect(() => {
     // fetch categories
     synchronizeStorageToRedux();
@@ -85,6 +92,10 @@ export default ({
   const seenPhrasesHeading = LANG_DATA[SEEN_PHRASES_HEADING][nativeLanguage];
   const learntPhrasesHeading =
     LANG_DATA[LEARNT_PHRASES_HEADING][nativeLanguage];
+  const noSeenAndLearntPharasesText =
+    LANG_DATA[NO_SEEN_AND_LEARNT_PHRASES_TEXT][nativeLanguage];
+  const singlePharaseText = LANG_DATA[SINGLE_PHRASE_TEXT][nativeLanguage];
+  const multiplePharasesText = LANG_DATA[MULTIPLE_PHRASES_TEXT][nativeLanguage];
 
   const openLearntPhrases = item => {
     if (learntPhrases.length > 0) {
@@ -97,28 +108,49 @@ export default ({
   const setLearntPhrasesRowText = () => {
     const numberOfPhrases = learntPhrases.length;
     if (numberOfPhrases === 0) {
-      return 'No learnt phrases yet';
+      return noSeenAndLearntPharasesText;
     } else if (numberOfPhrases === 1) {
-      return `${numberOfPhrases} word and phrase`;
+      return nativeLanguage === LANGUAGE_NAMES.EN
+        ? `${numberOfPhrases} ${singlePharaseText}`
+        : `${singlePharaseText} ${numberOfPhrases}`;
     } else {
-      return `${numberOfPhrases} words and phrases`;
+      return nativeLanguage === LANGUAGE_NAMES.EN
+        ? `${numberOfPhrases} ${multiplePharasesText}`
+        : `${multiplePharasesText} ${numberOfPhrases}`;
     }
   };
+
   // Number of the phrases in the seen phrases section
   function seenPhrasesTotal() {
     if (seenPhrases.length === 0) {
-      return 'No phrase';
+      return noSeenAndLearntPharasesText;
     } else if (seenPhrases.length === 1) {
-      return `${seenPhrases.length} word and a phrase.`;
+      return nativeLanguage === LANGUAGE_NAMES.EN
+        ? `${seenPhrases.length} ${singlePharaseText}`
+        : `${singlePharaseText} ${seenPhrases.length}`;
     } else {
-      return `${seenPhrases.length} words and phrases`;
+      return nativeLanguage === LANGUAGE_NAMES.EN
+        ? `${seenPhrases.length} ${multiplePharasesText}`
+        : `${multiplePharasesText} ${seenPhrases.length}`;
     }
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
-        <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: colors.background,
+      }}>
+      <KeyboardAvoidingView
+        style={{
+          flex: 1,
+        }}
+        behavior="padding">
+        <View
+          style={{
+            paddingHorizontal: 35,
+            paddingVertical: 23,
+          }}>
           <View style={styles.header}>
             <ToolBar
               button={
@@ -126,7 +158,7 @@ export default ({
                   onPress={() => {
                     navigation.navigate('Add');
                   }}>
-                  <AddIcon width={24} height={24} fill="#FFFFFF" />
+                  <AddIcon width={24} height={24} fill={colors.iconFill} />
                 </ToolButton>
               }
             />
@@ -136,7 +168,7 @@ export default ({
                   firstLanguage={LANGUAGE_NAMES.EN}
                   LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? 'MG' : 'EN'}
                   RightText={nativeLanguage === LANGUAGE_NAMES.EN ? 'EN' : 'MG'}
-                  color="#FFFFFF"
+                  color={colors.iconFill}
                   iconType=""
                   iconName="swap-horiz"
                   onPress={() =>
@@ -153,27 +185,30 @@ export default ({
             <ToolBar
               button={
                 <ToolButton onPress={action('clicked-add-button')}>
-                  <CheckIcon width={24} height={24} fill="#FFFFFF" />
+                  <CheckIcon width={24} height={24} fill={colors.iconFill} />
                 </ToolButton>
               }
             />
             <ToolBar
               button={
                 <ToolButton onPress={action('clicked-add-button')}>
-                  <CheckAllIcon width={24} height={24} fill="#FFFFFF" />
+                  <CheckAllIcon width={24} height={24} fill={colors.iconFill} />
                 </ToolButton>
               }
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
-                  <ModeIcon width={24} height={24} fill="#FFFFFF" />
+                <ToolButton onPress={switchTheme}>
+                  <ModeIcon width={24} height={24} fill={colors.iconFill} />
                 </ToolButton>
               }
             />
           </View>
           <View style={styles.heading}>
-            <SectionHeading text={selectCategoryHeading} />
+            <SectionHeading
+              textColor={colors.text}
+              text={selectCategoryHeading}
+            />
           </View>
           <List
             lang={nativeLanguage}
@@ -183,9 +218,12 @@ export default ({
             iconType="material-community"
             iconName="arrow-right"
             makeAction={openCategoryPhrases}
+            backgroundColor={colors.backgroundColor}
+            textColor={colors.text}
+            border={colors.border}
           />
           <View style={styles.heading}>
-            <SectionHeading text={seenPhrasesHeading} />
+            <SectionHeading textColor={colors.text} text={seenPhrasesHeading} />
           </View>
           <List
             data={[{id: '###seenPhrases###', name: seenPhrasesTotal()}]}
@@ -194,9 +232,15 @@ export default ({
             iconType="material-community"
             iconName="arrow-right"
             makeAction={openSeenPhrases}
+            backgroundColor={colors.backgroundColor}
+            textColor={colors.text}
+            border={colors.border}
           />
           <View style={styles.heading}>
-            <SectionHeading text={learntPhrasesHeading} />
+            <SectionHeading
+              textColor={colors.text}
+              text={learntPhrasesHeading}
+            />
           </View>
           <List
             text={learnButtonText}
@@ -206,11 +250,13 @@ export default ({
                 name: setLearntPhrasesRowText(),
               },
             ]}
-            text={'Learn'}
             color="#06B6D4"
             iconType="material-community"
             iconName="arrow-right"
             makeAction={openLearntPhrases}
+            backgroundColor={colors.backgroundColor}
+            textColor={colors.text}
+            border={colors.border}
           />
         </View>
       </KeyboardAvoidingView>
@@ -225,5 +271,6 @@ const styles = StyleSheet.create({
   },
   heading: {
     paddingBottom: 15,
+    color: '#FFFFFF',
   },
 });

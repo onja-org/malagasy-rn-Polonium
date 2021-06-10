@@ -1,4 +1,5 @@
- import {combineReducers} from 'redux';
+import {combineReducers} from 'redux';
+import {CUSTOM_THEMES} from '../theme';
 // import all of constat case name for the swich
 // in reducers
 import {
@@ -9,6 +10,7 @@ import {
   SET_LEARNT_PHRASES,
   SET_SEEN_PHRASE,
   SET_NEW_TERMS,
+  SWITCH_THEME,
 } from '../constants';
 
 // categories reducer
@@ -78,6 +80,17 @@ function newTerms(state = [], action) {
       return state;
   }
 }
+
+function themeMode(state = {}, action) {
+  switch (action.type) {
+    case SWITCH_THEME:
+      return state.name === CUSTOM_THEMES.nightMode.name
+        ? CUSTOM_THEMES.defaultMode
+        : CUSTOM_THEMES.nightMode;
+    default:
+      return state;
+  }
+}
 // combine all of the reducers together
 export default combineReducers({
   currentCategoryId,
@@ -87,4 +100,5 @@ export default combineReducers({
   nativeLanguage,
   learntPhrases,
   newTerms,
+  themeMode,
 });

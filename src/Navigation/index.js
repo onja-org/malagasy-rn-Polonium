@@ -5,7 +5,6 @@ import HomeScreen from '../containers/HomeScreenContainer';
 const Stack = createStackNavigator();
 import Learning from '../containers/LearningScreenContainer';
 import AddNewTerm from '../containers/AddNewTermScreenContainer';
-
 // a stack for screen navigator
 const HomeStack = () => {
   return (
