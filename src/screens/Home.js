@@ -105,6 +105,12 @@ export default ({
     }
   };
 
+  const openSeenPhrasesByButton = () => {
+    openSeenPhrases({
+      id: '###seenPhrases###',
+    });
+  };
+
   const setLearntPhrasesRowText = () => {
     const numberOfPhrases = learntPhrases.length;
     if (numberOfPhrases === 0) {
