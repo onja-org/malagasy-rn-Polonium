@@ -1,4 +1,4 @@
- import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {action} from '@storybook/addon-actions';
 import {
   Text,
@@ -47,7 +47,10 @@ export default ({
   // actions
   addLearntPhrases,
   removeWrongAswerFromLearntPhrases,
+  themeMode,
+  switchTheme,
 }) => {
+  const {colors} = themeMode;
   const [originalPhrases, setOriginalPhrases] = useState([]);
   const [phrasesLeft, setPhrasesLeft] = useState([]);
   const [answerOptions, setAnswerOptions] = useState([]);
@@ -76,7 +79,7 @@ export default ({
 
       if (item.id === currentPhrase.id && isItemNotExist) {
         addLearntPhrases(item);
-        removeFromSeenPhrases(item);
+        // removeFromSeenPhrases(item);
       } else {
         if (item.id !== currentPhrase.id) {
           removeWrongAswerFromLearntPhrases(item);
@@ -149,11 +152,11 @@ export default ({
     const catNameInMalagasy = `Fehezanteny efa nianarana - ${
       currentPhraseCategoryName?.name[LANGUAGE_NAMES.MG]
     }`;
-
     // Get category name function from utils
     return getCurrentCategoryName(
       currentCategoryName,
       isLearntPhrases,
+      nativeLanguage,
       catNameInEnglish,
       catNameInMalagasy,
     );
@@ -171,13 +174,14 @@ export default ({
     return getCurrentCategoryName(
       currentCategoryName,
       isSeenPhrases,
+      nativeLanguage,
       enCategoryName,
       mgCategoryName,
     );
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
         <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
           <View style={styles.header}>
@@ -187,7 +191,7 @@ export default ({
                   onPress={() => {
                     navigation.navigate('Home');
                   }}>
-                  <BackIcon width={24} height={24} fill="#FFFFFF" />
+                  <BackIcon width={24} height={24} fill={colors.iconFill} />
                 </ToolButton>
               }
             />
@@ -197,7 +201,7 @@ export default ({
                   firstLanguage={LANGUAGE_NAMES.EN}
                   LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? 'MG' : 'EN'}
                   RightText={nativeLanguage === LANGUAGE_NAMES.EN ? 'EN' : 'MG'}
-                  color="#FFFFFF"
+                  color={colors.iconFill}
                   iconType=""
                   iconName="swap-horiz"
                   onPress={() =>
@@ -213,23 +217,26 @@ export default ({
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
-                  <ModeIcon width={24} height={24} fill="#FFFFFF" />
+                <ToolButton onPress={switchTheme}>
+                  <ModeIcon width={24} height={24} fill={colors.iconFill} />
                 </ToolButton>
               }
             />
           </View>
           <View style={styles.heading}>
-            <SectionHeading text={categoryHeading} />
-            <Text>
-              {' '}
+            <SectionHeading textColor={colors.text} text={categoryHeading} />
+            <Text style={{color: colors.text}}>
               {isSeenPhrases
                 ? getSeenPhrasesCategoryName()
-                : getLearntPhrasesCategoryName()}{' '}
+                : getLearntPhrasesCategoryName()}
+              {/* {currentCategoryName} */}
             </Text>
+
+            {/* <SectionHeading textColor={colors.text} text={categoryHeading} />
+            <Text style={{color: colors.text}}>{currentCategoryName}</Text> */}
           </View>
           <View style={styles.heading}>
-            <SectionHeading text={phraseHeading} />
+            <SectionHeading textColor={colors.text} text={phraseHeading} />
           </View>
           <View style={{marginBottom: 37}}>
             <Textarea
@@ -239,12 +246,18 @@ export default ({
                   ? shouldReshuffleTextareaContent
                   : shouldNotReshuffleTextareaContent
               }
+              backgroundColor={colors.backgroundColor}
+              textColor={colors.text}
+              border={colors.border}
             />
           </View>
           {!shouldReshuffle && Boolean(answerOptions && answerOptions.length) && (
             <View>
               <View style={styles.heading}>
-                <SectionHeading text={solutionHeading} />
+                <SectionHeading
+                  textColor={colors.text}
+                  text={solutionHeading}
+                />
               </View>
               <List
                 lang={
@@ -260,6 +273,9 @@ export default ({
                 makeAction={selectAnswerCallback}
                 randomPhraseId={currentPhrase.id}
                 disableAllOptions={disableAllOptions}
+                backgroundColor={colors.backgroundColor}
+                textColor={colors.text}
+                border={colors.border}
               />
             </View>
           )}
@@ -268,7 +284,7 @@ export default ({
             <View style={{marginTop: 45}}>
               <NextButton
                 isDisabled={false}
-                textColor="#FFFFFF"
+                textColor={colors.iconFill}
                 text={nextButtonText}
                 onPress={nextAnswerCallback}
               />
@@ -278,7 +294,7 @@ export default ({
             <View style={{marginTop: 45}}>
               <NextButton
                 isDisabled={false}
-                textColor="#FFFFFF"
+                textColor={colors.iconFill}
                 text={reshuffleButtonText}
                 onPress={reshuffleCallback}
               />
@@ -298,6 +314,7 @@ const styles = StyleSheet.create({
   heading: {
     paddingBottom: 15,
     flexDirection: 'row',
+    alignItems: 'center',
   },
   debugList: {
     flexDirection: 'row',

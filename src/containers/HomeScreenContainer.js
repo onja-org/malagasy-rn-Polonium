@@ -1,11 +1,12 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Home from '../screens/Home';
 import {
   setCategories,
   setCurrentCategory,
   setPhrases,
   setLanguageName,
-  synchronizeStorageToRedux
+  synchronizeStorageToRedux,
+  switchTheme,
 } from '../redux/actions';
 
 import {
@@ -16,6 +17,7 @@ import {
   isLearntPhrases,
   newTermsRoot,
   seenPhrasesRoot,
+  themeModeRoot,
 } from '../redux/selectors';
 
 function mapStateToProps(state) {
@@ -27,7 +29,8 @@ function mapStateToProps(state) {
     isLearntPhrases: isLearntPhrases(state),
     seenPhrases: seenPhrasesRoot(state),
     newTerms: newTermsRoot(state),
-  }
+    themeMode: themeModeRoot(state),
+  };
 }
 
 const mapDispatchToProps = {
@@ -36,6 +39,7 @@ const mapDispatchToProps = {
   setPhrases,
   setLanguageName,
   synchronizeStorageToRedux,
+  switchTheme,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

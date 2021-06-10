@@ -9,7 +9,7 @@ export default function Button({onPress, isDisabled, text, textColor}) {
       style={isDisabled ? styles.disabledButton : styles.button}
       underlayColor="#06D440"
       onPress={onPress}>
-      <Text style={(styles.text, {color: textColor})}>{text}</Text>
+      <Text style={[styles.text, {color: textColor}]}>{text}</Text>
     </TouchableHighlight>
   );
 }

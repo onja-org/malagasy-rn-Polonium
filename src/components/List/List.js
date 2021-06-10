@@ -12,10 +12,20 @@ export default function List({
   lang,
   randomPhraseId,
   disableAllOptions,
+  backgroundColor,
+  textColor,
+  border,
 }) {
   return (
     <SafeAreaView>
-      <View style={styles.list}>
+      <View
+        style={[
+          styles.list,
+          {
+            backgroundColor: backgroundColor ? backgroundColor : '#FFFFFF',
+            borderColor: border ? border : '#E5E5E5',
+          },
+        ]}>
         <ListItem
           lang={lang}
           data={data}
@@ -26,6 +36,8 @@ export default function List({
           makeAction={makeAction}
           randomPhraseId={randomPhraseId}
           disableAllOptions={disableAllOptions}
+          textColor={textColor}
+          border={border}
         />
       </View>
     </SafeAreaView>

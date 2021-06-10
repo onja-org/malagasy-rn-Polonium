@@ -1,12 +1,11 @@
- import {LANGUAGE_NAMES} from '../data/dataUtils';
-
-// exports all of the states
+import {LANGUAGE_NAMES} from '../data/dataUtils';
+import {CUSTOM_THEMES} from '../redux/theme';
 export default {
   categories: [],
   currentCategoryId: '',
   categoryPhrases: [],
   nativeLanguage: LANGUAGE_NAMES.EN,
   learntPhrases: [],
-  seenPhrases: [],
   newTerms: [],
+  themeMode: CUSTOM_THEMES.defaultMode,
 };

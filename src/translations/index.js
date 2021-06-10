@@ -24,6 +24,10 @@ export const ENGLISH_PHRASE_HEADING = 'ENGLISH_PHRASE_HEADING';
 export const MALAGASY_PHRASE_HEADING = 'MALAGASY_PHRASE_HEADING';
 export const PLACEHOLDER_NEW_TERM = 'PLACEHOLDER_NEW_TERM';
 export const CLOSE_BUTTON_TEXT = 'CLOSE_BUTTON_TEXT';
+export const NO_SEEN_AND_LEARNT_PHRASES_TEXT =
+  'NO_SEEN_AND_LEARNT_PHRASES_TEXT';
+export const SINGLE_PHRASE_TEXT = 'SINGLE_PHRASE_TEXT';
+export const MULTIPLE_PHRASES_TEXT = 'MULTIPLE_PHRASES_TEXT';
 
 export const LANG_DATA = {
   [ANSWER_CORRECT]: {
@@ -98,5 +102,17 @@ export const LANG_DATA = {
   [CLOSE_BUTTON_TEXT]: {
     [LANGUAGE_NAMES.EN]: 'Close',
     [LANGUAGE_NAMES.MG]: 'Akatona',
+  },
+  [NO_SEEN_AND_LEARNT_PHRASES_TEXT]: {
+    [LANGUAGE_NAMES.EN]: 'No phrases',
+    [LANGUAGE_NAMES.MG]: 'Tsy misy andianteny',
+  },
+  [SINGLE_PHRASE_TEXT]: {
+    [LANGUAGE_NAMES.EN]: 'word and phrase',
+    [LANGUAGE_NAMES.MG]: 'Teny sy andianteny',
+  },
+  [MULTIPLE_PHRASES_TEXT]: {
+    [LANGUAGE_NAMES.EN]: 'words and phrases',
+    [LANGUAGE_NAMES.MG]: 'Ireo teny sy andianteny',
   },
 };
