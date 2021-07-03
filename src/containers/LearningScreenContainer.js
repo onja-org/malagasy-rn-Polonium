@@ -1,12 +1,15 @@
- import {connect} from 'react-redux';
+import {connect} from 'react-redux';
 import Learning from '../screens/Learning';
 import {
+  categoriesRoot,
   categoryPhrasesRoot,
   currentCategoryName,
+  seenPhrasesRoot,
   nativeLanguageRoot,
-  categoriesRoot,
   learntPhrases,
   isLearntPhrases,
+  isSeenPhrases,
+  themeModeRoot,
 } from '../redux/selectors';
 
 import {
@@ -14,7 +17,11 @@ import {
   setCurrentCategory,
   setCategories,
   addLearntPhrases,
+  addSeenPhrase,
+  removeFromSeenPhrases,
+  setSeenPhrases,
   removeWrongAswerFromLearntPhrases,
+  switchTheme,
 } from '../redux/actions';
 
 function mapStateToProps(state) {
@@ -25,16 +32,22 @@ function mapStateToProps(state) {
     nativeLanguage: nativeLanguageRoot(state),
     isLearntPhrases: isLearntPhrases(state),
     learntPhrases: learntPhrases(state),
-    isLearntPhrases: isLearntPhrases(state),
+    isSeenPhrases: isSeenPhrases(state),
+    seenPhrases: seenPhrasesRoot(state),
+    themeMode: themeModeRoot(state),
   };
 }
 
 const mapDispatchToProps = {
   setLanguageName,
   setCategories,
-  setCurrentCategory,
   addLearntPhrases,
   removeWrongAswerFromLearntPhrases,
+  addSeenPhrase,
+  setCurrentCategory,
+  removeFromSeenPhrases,
+  setSeenPhrases,
+  switchTheme,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Learning);

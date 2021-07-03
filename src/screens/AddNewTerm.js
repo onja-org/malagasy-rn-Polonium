@@ -22,6 +22,8 @@ import {
   SELECT_CATEGORY_HEADING,
   CLOSE_BUTTON_TEXT,
 } from '../translations';
+import {CUSTOM_THEMES} from '../redux/theme';
+
 import {generateId} from '../utils';
 
 import ToolBar from '../components/ToolBar/ToolBar';
@@ -43,7 +45,11 @@ export default ({
   setLanguageName,
   nativeLanguage,
   addNewTerm,
+  themeMode,
+  switchTheme,
 }) => {
+  const {colors} = themeMode;
+
   const [englishPhrase, setEnglishPhrase] = useState('');
   const [malagasyPhrase, setMalagasyPhrase] = useState('');
   const [openCategoriesList, setOpenCategoriesList] = useState(false);
@@ -88,7 +94,7 @@ export default ({
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
       <KeyboardAvoidingView style={{flex: 1}}>
         <View style={{paddingHorizontal: 35, paddingVertical: 23}}>
           <View style={styles.header}>
@@ -98,7 +104,7 @@ export default ({
                   onPress={() => {
                     navigation.navigate('Home');
                   }}>
-                  <BackIcon width={24} height={24} fill="#FFFFFF" />
+                  <BackIcon width={24} height={24} fill={colors.iconFill} />
                 </ToolButton>
               }
             />
@@ -108,7 +114,7 @@ export default ({
                   firstLanguage={LANGUAGE_NAMES.EN}
                   LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? 'MG' : 'EN'}
                   RightText={nativeLanguage === LANGUAGE_NAMES.EN ? 'EN' : 'MG'}
-                  color="#FFFFFF"
+                  color={colors.iconFill}
                   iconType=""
                   iconName="swap-horiz"
                   onPress={() =>
@@ -124,14 +130,14 @@ export default ({
             />
             <ToolBar
               button={
-                <ToolButton onPress={() => {}}>
-                  <ModeIcon width={24} height={24} fill="#FFFFFF" />
+                <ToolButton onPress={switchTheme}>
+                  <ModeIcon width={24} height={24} fill={colors.iconFill} />
                 </ToolButton>
               }
             />
           </View>
           <View style={styles.heading}>
-            <SectionHeading text={categoryHeading} />
+            <SectionHeading textColor={colors.text} text={categoryHeading} />
             <TouchableOpacity
               style={styles.select}
               onPress={() => setOpenCategoriesList(true)}>
@@ -148,16 +154,26 @@ export default ({
               </View>
             </TouchableOpacity>
             {openCategoriesList && (
-              <View style={styles.dropdownSelect}>
+              <View
+                style={[
+                  styles.dropdownSelect,
+                  {backgroundColor: colors.backgroundColor},
+                ]}>
                 <List
                   data={categories}
                   lang={nativeLanguage}
                   makeAction={selectCategory}
+                  backgroundColor={colors.backgroundColor}
+                  textColor={colors.text}
+                  border={colors.border}
                 />
                 <TouchableOpacity
                   style={styles.closeButton}
                   onPress={() => setOpenCategoriesList(false)}>
-                  <Text style={styles.closeButtonText}>{closeButtonText}</Text>
+                  <Text
+                    style={[styles.closeButtonText, {color: colors.iconFill}]}>
+                    {closeButtonText}
+                  </Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -165,7 +181,10 @@ export default ({
           <KeyboardAwareScrollView>
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
               <View style={styles.heading}>
-                <SectionHeading text={englishPhraseHeading} />
+                <SectionHeading
+                  textColor={colors.text}
+                  text={englishPhraseHeading}
+                />
               </View>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -175,13 +194,19 @@ export default ({
                   editable={true}
                   onChange={text => setEnglishPhrase(text)}
                   placeholder={placeholderNewTerm}
+                  backgroundColor={colors.backgroundColor}
+                  textColor={colors.text}
+                  border={colors.border}
                 />
               </View>
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
               <View style={styles.heading}>
-                <SectionHeading text={malagasyPhraseHeading} />
+                <SectionHeading
+                  textColor={colors.text}
+                  text={malagasyPhraseHeading}
+                />
               </View>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -191,6 +216,9 @@ export default ({
                   editable={true}
                   onChange={text => setMalagasyPhrase(text)}
                   placeholder={placeholderNewTerm}
+                  backgroundColor={colors.backgroundColor}
+                  textColor={colors.text}
+                  border={colors.border}
                 />
               </View>
             </TouchableWithoutFeedback>
@@ -198,7 +226,7 @@ export default ({
             <View style={{marginTop: 45}}>
               <AddButton
                 isDisabled={disableAddButton}
-                textColor={disableAddButton ? '#06B6D4' : '#FFFFFF'}
+                textColor={disableAddButton ? '#06B6D4' : colors.iconFill}
                 text={addButtonText}
                 onPress={addNewTermToCategory}
               />
