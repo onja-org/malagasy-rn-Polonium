@@ -40,16 +40,14 @@ export const getAllPhrases = () => {
 };
 
 export const findPhraseCategories = phraseId => {
- return phrasesData.phrases;
+  return phrasesData.phrases;
 };
 
-
 export function findCategoryById(id) {
-  
-  throw 'not implemented!';
-  // TODO implement
+  const category = categoriesData.categories.find(cat => cat.id === id);
+  return (category && category.phrasesIds) || null;
 }
 export function findPhraseById(id) {
-  throw 'not implemented!';
-  // TODO implement
+  const phraseFromId = phrasesData.phrases.find(phrase => phrase.id === id);
+  return (phraseFromId && phraseFromId) || null;
 }

@@ -156,8 +156,14 @@ describe('findCategoryById', () => {
 
 describe('findPhraseById', () => {
   it('finds phrase by id', () => {
-    const received = findPhraseById('###writing-letter###');
-    const expected = {};
+    const received = findPhraseById('greet#1');
+    const expected = {
+      id: 'greet#1',
+      name: {
+        en: 'Hi!',
+        mg: 'manao ahoana e!!',
+      },
+    };
     console.log(received);
     expect(received).toEqual(expected);
   });
