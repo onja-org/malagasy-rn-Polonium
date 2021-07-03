@@ -44,12 +44,11 @@ export const findPhraseCategories = phraseId => {
 };
 
 
-export function findCategoryById(id) {
-  
-  throw 'not implemented!';
-  // TODO implement
+export function findCategoryById(id) { 
+  const category = categoriesData.categories.find(cat => cat.id === id);
+  return (category && category.phrasesIds) || null;
 }
 export function findPhraseById(id) {
-  throw 'not implemented!';
-  // TODO implement
+  const phraseFromId = phrasesData.phrases.find(phrase => phrase.id === id);
+  return (phraseFromId && phraseFromId) || null;
 }
