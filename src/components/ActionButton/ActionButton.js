@@ -16,7 +16,7 @@ export default function ActionButton({
       underlayColor="transparent"
       onRowPress={onPress}>
       <View style={styles.button}>
-        <Text style={(styles.text, {color: color})}>{text}</Text>
+        <Text style={[styles.text, {color: color}]}>{text}</Text>
         <Icon
           style={{marginLeft: 10}}
           name={iconName}

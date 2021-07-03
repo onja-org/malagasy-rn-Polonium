@@ -1,14 +1,44 @@
 // components/Task.js
 import * as React from 'react';
-import { SafeAreaView, View, StyleSheet,TextInput } from 'react-native';
+import {SafeAreaView, View, StyleSheet, TextInput} from 'react-native';
 // import { styles } from '../constants/globalStyles';
 
-export default function Example({phrase,editable,onChange = () => null, placeholder}) {
-
+export default function Example({
+  phrase,
+  editable,
+  onChange = () => null,
+  placeholder,
+  backgroundColor,
+  textColor,
+  border,
+}) {
+  const defaultTextColor = '#111827';
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[
+        styles.container,
+        {
+          backgroundColor: backgroundColor ? backgroundColor : '#fff',
+          borderColor: border ? border : '#E5E5E5',
+        },
+      ]}>
       <TextInput
-        style={editable ? styles.input : styles.textarea}
+        placeholderTextColor={
+          textColor === defaultTextColor ? 'rgba(17, 24, 39, 0.5)' : textColor
+        }
+        style={
+          editable
+            ? [
+                styles.input,
+                {
+                  color: textColor ? textColor : defaultTextColor,
+                },
+              ]
+            : [
+                styles.textarea,
+                {color: textColor ? textColor : defaultTextColor},
+              ]
+        }
         value={phrase}
         editable={editable}
         onChangeText={onChange}
@@ -20,7 +50,7 @@ export default function Example({phrase,editable,onChange = () => null, placehol
 }
 
 const styles = StyleSheet.create({
-    container: {
+  container: {
     height: 100,
     marginVertical: 0,
     marginHorizontal: 'auto',
@@ -36,11 +66,10 @@ const styles = StyleSheet.create({
     lineHeight: 24.3,
   },
   textarea: {
-    color: '#111827',
+    color: 'white',
     maxWidth: 360,
     marginHorizontal: 'auto',
     fontSize: 20,
     lineHeight: 24.3,
   },
-
-})
+});
