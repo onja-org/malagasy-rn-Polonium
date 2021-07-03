@@ -44,5 +44,11 @@ export const findPhraseCategories = phraseId => {
   return phrasesData.phrases;
 };
 
-export function findCategoryById(id) {}
-export function findPhraseById(id) {}
+export function findCategoryById(id) {
+  const category = categoriesData.categories.find(cat => cat.id === id);
+  return (category && category.phrasesIds) || null;
+}
+export function findPhraseById(id) {
+  const phraseFromId = phrasesData.phrases.find(phrase => phrase.id === id);
+  return (phraseFromId && phraseFromId) || null;
+}
