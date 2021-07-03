@@ -124,8 +124,13 @@ export default ({
         ? `${numberOfPhrases} ${multiplePharasesText}`
         : `${multiplePharasesText} ${numberOfPhrases}`;
     }
+  }; 
+  const openLearntPhrasesByButton = () => {
+    openLearntPhrases({
+      id: '###learntPhrases###',
+    });
   };
-
+ 
   // Number of the phrases in the seen phrases section
   function seenPhrasesTotal() {
     if (seenPhrases.length === 0) {
@@ -139,7 +144,7 @@ export default ({
         ? `${seenPhrases.length} ${multiplePharasesText}`
         : `${multiplePharasesText} ${seenPhrases.length}`;
     }
-  }
+  } 
 
   return (
     <SafeAreaView
@@ -197,7 +202,7 @@ export default ({
             />
             <ToolBar
               button={
-                <ToolButton onPress={action('clicked-add-button')}>
+                <ToolButton onPress={openLearntPhrasesByButton}>
                   <CheckAllIcon width={24} height={24} fill={colors.iconFill} />
                 </ToolButton>
               }
