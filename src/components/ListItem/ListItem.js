@@ -11,7 +11,11 @@ import {
 
 import {LANG_DATA, ANSWER_CORRECT, ANSWER_WRONG} from '../../translations';
 
-export const Separator = () => <View style={styles.separator} />;
+export const Separator = ({border}) => (
+  <View
+    style={[styles.separator, {backgroundColor: border ? border : '#E5E5E5'}]}
+  />
+);
 const RenderDataItem = ({
   item,
   index,
@@ -23,6 +27,7 @@ const RenderDataItem = ({
   lang,
   randomPhraseId,
   disableAllOptions,
+  textColor,
 }) => {
   const showAnswerMode = disableAllOptions === true;
   const isCorrectAnswer = item.id === randomPhraseId;
@@ -64,7 +69,10 @@ const RenderDataItem = ({
       style={styles.item}
       onPress={() => makeAction(item, index)}>
       <View>
-        <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.text}>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode={'tail'}
+          style={[styles.text, {color: textColor ? textColor : '#111827'}]}>
           {lang ? item?.name?.[lang] : item.name}
         </Text>
       </View>
@@ -88,6 +96,8 @@ export default function ListItem({
   lang,
   randomPhraseId,
   disableAllOptions,
+  textColor,
+  border,
 }) {
   return (
     <SafeAreaView>
@@ -105,10 +115,11 @@ export default function ListItem({
             lang={lang}
             randomPhraseId={randomPhraseId}
             disableAllOptions={disableAllOptions}
+            textColor={textColor}
           />
         )}
         keyExtractor={item => item.id}
-        ItemSeparatorComponent={() => <Separator />}
+        ItemSeparatorComponent={() => <Separator border={border} />}
       />
     </SafeAreaView>
   );
