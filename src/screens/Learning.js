@@ -27,7 +27,7 @@ import ToolButton from '../components/ToolButton/ToolButton';
 import LanguageSwitcher from '../components/LanguageSwitcher/LanguageSwitcher';
 import BackIcon from '../components/ToolButton/assets/back.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
-import {LANGUAGE_NAMES} from '../data/dataUtils';
+import {LANGUAGE_NAMES, getPhrasesForCategoryId} from '../data/dataUtils';
 import {shuffleArray, getCurrentCategoryName} from '../utils';
 export default ({
   //nav provider
@@ -62,6 +62,15 @@ export default ({
     setOriginalPhrases(categoryPhrases);
     setNewQuestionPhrase(categoryPhrases, categoryPhrases);
   }, [categoryPhrases]);
+
+  useEffect(() => {
+    if (currentPhraseCategoryName) {
+      const originalPhrasesAdded = getPhrasesForCategoryId(
+        currentPhraseCategoryName.id,
+      );
+      setAnswerOptionsCallback(originalPhrasesAdded, currentPhrase);
+    }
+  }, [currentPhrase]);
 
   const setAnswerOptionsCallback = (original, current) => {
     const originWithoutCurrent = original.filter(phr => phr.id !== current?.id);
