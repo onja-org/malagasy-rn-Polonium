@@ -146,6 +146,12 @@ export default ({
     }
   } 
 
+  const openSeenPhrasesByButton = () => {
+    openSeenPhrases({
+      id: '###seenPhrases###',
+    });
+  };
+
   return (
     <SafeAreaView
       style={{
