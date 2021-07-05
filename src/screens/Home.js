@@ -21,6 +21,8 @@ import {
   StyleSheet,
   SafeAreaView,
   KeyboardAvoidingView,
+  ScrollView,
+  LogBox
 } from 'react-native';
 import List from '../components/List/List';
 import SectionHeading from '../components/SectionHeading/SectionHeading';
@@ -32,6 +34,9 @@ import AddIcon from '../components/ToolButton/assets/add.svg';
 import CheckIcon from '../components/ToolButton/assets/check.svg';
 import CheckAllIcon from '../components/ToolButton/assets/check-all.svg';
 import ModeIcon from '../components/ToolButton/assets/mode.svg';
+
+// Ignores the error from the use of nested VirtualizedLists but still works fine
+LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
 export default ({
   //nav provider
@@ -157,119 +162,121 @@ export default ({
           flex: 1,
         }}
         behavior="padding">
-        <View
-          style={{
-            paddingHorizontal: 35,
-            paddingVertical: 23,
-          }}>
-          <View style={styles.header}>
-            <ToolBar
-              button={
-                <ToolButton
-                  onPress={() => {
-                    navigation.navigate('Add');
-                  }}>
-                  <AddIcon width={24} height={24} fill={colors.iconFill} />
-                </ToolButton>
-              }
-            />
-            <ToolBar
-              button={
-                <LanguageSwitcher
-                  firstLanguage={LANGUAGE_NAMES.EN}
-                  LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? 'MG' : 'EN'}
-                  RightText={nativeLanguage === LANGUAGE_NAMES.EN ? 'EN' : 'MG'}
-                  color={colors.iconFill}
-                  iconType=""
-                  iconName="swap-horiz"
-                  onPress={() =>
-                    setLanguageName(
-                      nativeLanguage === LANGUAGE_NAMES.EN
-                        ? LANGUAGE_NAMES.MG
-                        : LANGUAGE_NAMES.EN,
-                    )
-                  }
-                  iconSize={24}
-                />
-              }
-            />
-            <ToolBar
-              button={
-                <ToolButton onPress={action('clicked-add-button')}>
-                  <CheckIcon width={24} height={24} fill={colors.iconFill} />
-                </ToolButton>
-              }
-            />
-            <ToolBar
-              button={
-                <ToolButton onPress={openLearntPhrasesByButton}>
-                  <CheckAllIcon width={24} height={24} fill={colors.iconFill} />
-                </ToolButton>
-              }
-            />
-            <ToolBar
-              button={
-                <ToolButton onPress={switchTheme}>
-                  <ModeIcon width={24} height={24} fill={colors.iconFill} />
-                </ToolButton>
-              }
-            />
-          </View>
-          <View style={styles.heading}>
-            <SectionHeading
+        <ScrollView>
+          <View
+            style={{
+              paddingHorizontal: 35,
+              paddingVertical: 23,
+            }}>
+            <View style={styles.header}>
+              <ToolBar
+                button={
+                  <ToolButton
+                    onPress={() => {
+                      navigation.navigate('Add');
+                    }}>
+                    <AddIcon width={24} height={24} fill={colors.iconFill} />
+                  </ToolButton>
+                }
+              />
+              <ToolBar
+                button={
+                  <LanguageSwitcher
+                    firstLanguage={LANGUAGE_NAMES.EN}
+                    LeftText={nativeLanguage === LANGUAGE_NAMES.EN ? 'MG' : 'EN'}
+                    RightText={nativeLanguage === LANGUAGE_NAMES.EN ? 'EN' : 'MG'}
+                    color={colors.iconFill}
+                    iconType=""
+                    iconName="swap-horiz"
+                    onPress={() =>
+                      setLanguageName(
+                        nativeLanguage === LANGUAGE_NAMES.EN
+                          ? LANGUAGE_NAMES.MG
+                          : LANGUAGE_NAMES.EN,
+                      )
+                    }
+                    iconSize={24}
+                  />
+                }
+              />
+              <ToolBar
+                button={
+                  <ToolButton onPress={action('clicked-add-button')}>
+                    <CheckIcon width={24} height={24} fill={colors.iconFill} />
+                  </ToolButton>
+                }
+              />
+              <ToolBar
+                button={
+                  <ToolButton onPress={action('clicked-add-button')}>
+                    <CheckAllIcon width={24} height={24} fill={colors.iconFill} />
+                  </ToolButton>
+                }
+              />
+              <ToolBar
+                button={
+                  <ToolButton onPress={switchTheme}>
+                    <ModeIcon width={24} height={24} fill={colors.iconFill} />
+                  </ToolButton>
+                }
+              />
+            </View>
+            <View style={styles.heading}>
+              <SectionHeading
+                textColor={colors.text}
+                text={selectCategoryHeading}
+              />
+            </View>
+            <List
+              lang={nativeLanguage}
+              data={categories}
+              text={learnButtonText}
+              color="#06B6D4"
+              iconType="material-community"
+              iconName="arrow-right"
+              makeAction={openCategoryPhrases}
+              backgroundColor={colors.backgroundColor}
               textColor={colors.text}
-              text={selectCategoryHeading}
+              border={colors.border}
             />
-          </View>
-          <List
-            lang={nativeLanguage}
-            data={categories}
-            text={learnButtonText}
-            color="#06B6D4"
-            iconType="material-community"
-            iconName="arrow-right"
-            makeAction={openCategoryPhrases}
-            backgroundColor={colors.backgroundColor}
-            textColor={colors.text}
-            border={colors.border}
-          />
-          <View style={styles.heading}>
-            <SectionHeading textColor={colors.text} text={seenPhrasesHeading} />
-          </View>
-          <List
-            data={[{id: '###seenPhrases###', name: seenPhrasesTotal()}]}
-            text={learnButtonText}
-            color="#06B6D4"
-            iconType="material-community"
-            iconName="arrow-right"
-            makeAction={openSeenPhrases}
-            backgroundColor={colors.backgroundColor}
-            textColor={colors.text}
-            border={colors.border}
-          />
-          <View style={styles.heading}>
-            <SectionHeading
+            <View style={styles.heading}>
+              <SectionHeading textColor={colors.text} text={seenPhrasesHeading} />
+            </View>
+            <List
+              data={[{id: '###seenPhrases###', name: seenPhrasesTotal()}]}
+              text={learnButtonText}
+              color="#06B6D4"
+              iconType="material-community"
+              iconName="arrow-right"
+              makeAction={openSeenPhrases}
+              backgroundColor={colors.backgroundColor}
               textColor={colors.text}
-              text={learntPhrasesHeading}
+              border={colors.border}
+            />
+            <View style={styles.heading}>
+              <SectionHeading
+                textColor={colors.text}
+                text={learntPhrasesHeading}
+              />
+            </View>
+            <List
+              text={learnButtonText}
+              data={[
+                {
+                  id: '###learntPhrases###',
+                  name: setLearntPhrasesRowText(),
+                },
+              ]}
+              color="#06B6D4"
+              iconType="material-community"
+              iconName="arrow-right"
+              makeAction={openLearntPhrases}
+              backgroundColor={colors.backgroundColor}
+              textColor={colors.text}
+              border={colors.border}
             />
           </View>
-          <List
-            text={learnButtonText}
-            data={[
-              {
-                id: '###learntPhrases###',
-                name: setLearntPhrasesRowText(),
-              },
-            ]}
-            color="#06B6D4"
-            iconType="material-community"
-            iconName="arrow-right"
-            makeAction={openLearntPhrases}
-            backgroundColor={colors.backgroundColor}
-            textColor={colors.text}
-            border={colors.border}
-          />
-        </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

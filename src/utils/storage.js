@@ -19,4 +19,4 @@ export async function getDataFromStorage(storagekey) {
   } catch (error) {
     alert(error);
   }
- 
+}

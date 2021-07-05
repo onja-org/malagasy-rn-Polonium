@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: '#111827',
-    maxWidth: 320,
+    maxWidth: 249,
   },
   separator: {
     flex: 1,
