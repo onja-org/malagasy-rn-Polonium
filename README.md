@@ -1,20 +1,20 @@
-# Learn-gasy - mobile application that helps to learn Malagasy or English
+# Learn-gasy - mobile application to help people learn Malagasy or English
 
 ## Features:
-   - around 1000 phrases divided into 42 categories
-   - two operating modes where you can set Malagasy or English as primary language
-   - randomly generated answers to choose from - keeps challenges always exciting
-   - “Seen” and “Learnt” phrases are easily accessible to track learning progress
-   - possibility to add new custom phrases and assigning them to existing categories
-   - dark/light mode
-   - easy navigation
-   - persistent storage to track your progress between sessions
-   - application once installed does not require internet connection
+   - Around 1000 phrases divided into 42 categories.
+   - Two operating modes where you can set Malagasy or English as primary language.
+   - Randomly generated answers to choose from - keeps challenges always exciting.
+   - “Seen” and “Learnt” phrases are easily accessible to track learning progress.
+   - Possibility to add new custom phrases and assigning them to existing categories.
+   - Dark/light mode.
+   - Easy navigation.
+   - Persistent storage to track your progress between sessions.
+   - Once installed, application does not require internet connection.
 
 ## Technology/libraries used:
    - React Native
-   - Running / testing app in simulator environment (Android studio)
-   - storybook 
+   - Android Studio
+   - Storybook 
    - Screen navigation
    - Redux
    - Redux thunk
